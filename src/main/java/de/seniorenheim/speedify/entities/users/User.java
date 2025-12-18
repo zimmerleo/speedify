@@ -27,4 +27,7 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private BankAccount bankAccount;
+
+    @Column
+    private Boolean administrator = false;
 }

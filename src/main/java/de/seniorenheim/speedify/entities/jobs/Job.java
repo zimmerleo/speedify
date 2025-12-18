@@ -24,11 +24,11 @@ public class Job {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Company from;
+    private Company origin;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Company to;
+    private Company destination;
 
     private LocalDateTime accepted;
 
