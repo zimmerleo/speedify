@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Speedify
+  datasource:
+    url: jdbc:postgresql://localhost:5432/speedify
+    username: ${SPEEDIFYDB_USER}
+    password: ${SPEEDIFYDB_PW}
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+#logging:
+#  level:
+#    org.springframework.security: trace
