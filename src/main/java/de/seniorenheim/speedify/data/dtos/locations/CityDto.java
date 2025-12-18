@@ -1,7 +1,7 @@
 package de.seniorenheim.speedify.data.dtos.locations;
 
-import de.seniorenheim.speedify.data.entities.locations.City;
 import de.seniorenheim.speedify.data.dtos.dlcs.DLCDto;
+import de.seniorenheim.speedify.data.entities.locations.City;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;

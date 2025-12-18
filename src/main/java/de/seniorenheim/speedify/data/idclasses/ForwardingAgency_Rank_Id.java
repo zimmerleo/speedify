@@ -5,7 +5,6 @@ import de.seniorenheim.speedify.data.entities.forwardingagencies.ranks.Rank;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 @EqualsAndHashCode
 public class ForwardingAgency_Rank_Id implements Serializable {

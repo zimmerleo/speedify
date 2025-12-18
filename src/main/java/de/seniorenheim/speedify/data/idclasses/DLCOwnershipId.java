@@ -5,7 +5,6 @@ import de.seniorenheim.speedify.data.entities.users.User;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 @EqualsAndHashCode
 public class DLCOwnershipId implements Serializable {

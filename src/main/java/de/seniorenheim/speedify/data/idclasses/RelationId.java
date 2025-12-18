@@ -4,7 +4,6 @@ import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgenc
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 @EqualsAndHashCode
 public class RelationId implements Serializable {

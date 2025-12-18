@@ -1,7 +1,7 @@
 package de.seniorenheim.speedify.data.dtos.trucks;
 
-import de.seniorenheim.speedify.data.entities.trucks.Truck;
 import de.seniorenheim.speedify.data.dtos.users.UserDto;
+import de.seniorenheim.speedify.data.entities.trucks.Truck;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;

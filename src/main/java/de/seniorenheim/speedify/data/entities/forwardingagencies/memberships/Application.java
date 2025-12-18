@@ -1,9 +1,9 @@
 package de.seniorenheim.speedify.data.entities.forwardingagencies.memberships;
 
+import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgency;
+import de.seniorenheim.speedify.data.entities.forwardingagencies.careers.Career;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.ranks.Rank;
 import de.seniorenheim.speedify.data.entities.users.User;
-import de.seniorenheim.speedify.data.entities.forwardingagencies.careers.Career;
-import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgency;
 import jakarta.persistence.*;
 import lombok.*;
 

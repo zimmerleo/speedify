@@ -1,7 +1,7 @@
 package de.seniorenheim.speedify.data.dtos.dlcs;
 
-import de.seniorenheim.speedify.data.entities.dlcs.DLCOwnership;
 import de.seniorenheim.speedify.data.dtos.users.UserDto;
+import de.seniorenheim.speedify.data.entities.dlcs.DLCOwnership;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;

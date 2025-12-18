@@ -1,11 +1,10 @@
 package de.seniorenheim.speedify.data.idclasses;
 
-import de.seniorenheim.speedify.data.entities.forwardingagencies.careers.Career;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgency;
+import de.seniorenheim.speedify.data.entities.forwardingagencies.careers.Career;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 @EqualsAndHashCode
 public class ForwardingAgency_Career_Id implements Serializable {
