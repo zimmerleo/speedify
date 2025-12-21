@@ -4,6 +4,8 @@ import de.seniorenheim.speedify.data.entities.dlcs.DLC;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -16,7 +18,7 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -24,6 +26,14 @@ public class City {
     private Country locatedIn;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = true)
+    @JoinColumn
     private DLC dlc;
+
+    @ManyToMany
+    @JoinTable(
+            name = "cities_companies",
+            joinColumns = @JoinColumn(name = "city_id"),
+            inverseJoinColumns = @JoinColumn(name = "company_id")
+    )
+    private List<Company> companies;
 }

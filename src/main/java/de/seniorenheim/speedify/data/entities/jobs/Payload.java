@@ -15,7 +15,7 @@ public class Payload {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String description;
+    @Column(nullable = false, length = 1000,  unique = true)
+    private String name;
 
 }

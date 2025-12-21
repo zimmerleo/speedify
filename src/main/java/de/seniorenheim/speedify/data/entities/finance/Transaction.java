@@ -19,11 +19,11 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn
-    private BankAccount from;
+    private BankAccount payer;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
-    private BankAccount to;
+    @JoinColumn
+    private BankAccount payee;
 
     @Column(nullable = false)
     private double amount;

@@ -1,8 +1,7 @@
 package de.seniorenheim.speedify.data.entities.forwardingagencies.memberships;
 
 import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgency;
-import de.seniorenheim.speedify.data.entities.forwardingagencies.careers.Career;
-import de.seniorenheim.speedify.data.entities.forwardingagencies.ranks.Rank;
+import de.seniorenheim.speedify.data.entities.forwardingagencies.memberships.roles.Role;
 import de.seniorenheim.speedify.data.entities.users.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,13 +28,8 @@ public class Application {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Career career;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Rank rank;
+    private Role role;
 
     @Column(length = 1000)
     private String text;
-
 }

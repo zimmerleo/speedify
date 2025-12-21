@@ -18,10 +18,10 @@ public class ForwardingAgency {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column
+    @Column(length = 1000)
     private String description;
 
     @ManyToOne

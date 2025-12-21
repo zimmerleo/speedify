@@ -31,15 +31,20 @@ public class Job {
     @JoinColumn(nullable = false)
     private Company destination;
 
-    private LocalDateTime accepted;
+    @Builder.Default
+    LocalDateTime accepted = null;
 
     @ManyToOne
     @JoinColumn
-    private Truck truck;
+    @Builder.Default
+    private Truck truck = null;
 
-    private Double kilometersDriven;
+    @Builder.Default
+    private Double kilometersDriven = 0D;
 
-    private Double hoursDriven;
+    @Builder.Default
+    private Double hoursDriven = 0D;
 
-    private LocalDateTime completed;
+    @Builder.Default
+    private LocalDateTime completed = null;
 }

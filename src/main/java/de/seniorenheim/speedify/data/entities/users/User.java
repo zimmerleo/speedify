@@ -1,8 +1,14 @@
 package de.seniorenheim.speedify.data.entities.users;
 
+import de.seniorenheim.speedify.data.entities.dlcs.DLC;
 import de.seniorenheim.speedify.data.entities.finance.BankAccount;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 @Getter
 @Setter
@@ -16,10 +22,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -29,7 +35,19 @@ public class User {
     @JoinColumn(nullable = false)
     private BankAccount bankAccount;
 
-    @Column
+    @Column(nullable = false)
     @Builder.Default
     private Boolean administrator = false;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_dlcs",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "dlc_id")
+    )
+    @Builder.Default
+    private List<DLC> dlcs = emptyList();
+
+    @Column(nullable = false)
+    private LocalDateTime creationDate;
 }
