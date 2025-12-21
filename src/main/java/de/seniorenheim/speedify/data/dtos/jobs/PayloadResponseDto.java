@@ -16,4 +16,5 @@ import java.io.Serializable;
 public class PayloadResponseDto implements Serializable {
     Long id;
     String name;
+    PayloadTypeResponseDto payloadType;
 }

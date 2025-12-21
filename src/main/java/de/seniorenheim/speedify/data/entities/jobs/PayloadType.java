@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "payload_type")
+@Table(name = "payload_types")
 public class PayloadType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

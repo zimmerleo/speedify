@@ -18,4 +18,8 @@ public class Payload {
     @Column(nullable = false, length = 1000,  unique = true)
     private String name;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private PayloadType payloadType;
+
 }

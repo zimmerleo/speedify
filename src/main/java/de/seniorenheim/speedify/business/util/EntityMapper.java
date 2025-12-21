@@ -115,6 +115,7 @@ public class EntityMapper {
         return PayloadResponseDto.builder()
                 .id(payload.getId())
                 .name(payload.getName())
+                .payloadType(fromEntity(payload.getPayloadType()))
                 .build();
     }
 
