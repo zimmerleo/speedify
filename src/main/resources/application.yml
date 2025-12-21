@@ -12,6 +12,9 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: create-drop
+  sql:
+    init:
+      mode: always
 #logging:
 #  level:
 #    org.springframework.security: trace
