@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Builder
@@ -21,7 +23,7 @@ public class BankAccount {
     @Column(nullable = false, length = 22)
     private String iban;
 
-    @Column(nullable = false)
+    @Column(scale = 2, nullable = false)
     @Builder.Default
-    private Double balance = 0D;
+    private BigDecimal balance = BigDecimal.ZERO;
 }

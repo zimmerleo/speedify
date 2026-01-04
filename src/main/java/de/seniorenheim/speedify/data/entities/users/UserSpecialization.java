@@ -1,5 +1,6 @@
 package de.seniorenheim.speedify.data.entities.users;
 
+import de.seniorenheim.speedify.data.idclasses.UserSpecializationId;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,20 +11,20 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "users_specializations")
-@IdClass(User_Specialization.class)
-public class User_Specialization {
+@IdClass(UserSpecializationId.class)
+public class UserSpecialization {
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User user;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Specialization specialization;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Rank rank;
 

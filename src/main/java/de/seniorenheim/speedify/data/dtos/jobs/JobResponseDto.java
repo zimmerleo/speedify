@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -23,7 +24,8 @@ public class JobResponseDto implements Serializable {
     CompanyResponseDto destination;
     LocalDateTime accepted;
     TruckResponseDto truck;
-    Double kilometersDriven;
-    Double hoursDriven;
+    BigDecimal kilometersDriven;
+    BigDecimal hoursDriven;
     LocalDateTime completed;
+    Integer xp;
 }

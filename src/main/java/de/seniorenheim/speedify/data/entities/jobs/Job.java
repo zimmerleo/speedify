@@ -5,6 +5,7 @@ import de.seniorenheim.speedify.data.entities.trucks.Truck;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -19,32 +20,31 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Payload payload;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Company origin;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Company destination;
 
-    @Builder.Default
-    LocalDateTime accepted = null;
+    LocalDateTime accepted;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    @Builder.Default
-    private Truck truck = null;
+    private Truck truck;
 
-    @Builder.Default
-    private Double kilometersDriven = 0D;
+    @Column(scale = 2)
+    private BigDecimal kilometersDriven;
 
-    @Builder.Default
-    private Double hoursDriven = 0D;
+    @Column(scale = 2)
+    private BigDecimal hoursDriven;
 
-    @Builder.Default
-    private LocalDateTime completed = null;
+    private LocalDateTime completed;
+
+    private Integer xp;
 }

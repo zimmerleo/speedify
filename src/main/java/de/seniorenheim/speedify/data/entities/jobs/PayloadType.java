@@ -20,7 +20,7 @@ public class PayloadType {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Specialization specialization;
 

@@ -16,4 +16,6 @@ import java.io.Serializable;
 public class LevelResponseDto implements Serializable {
     Long id;
     String name;
+    Long superior;
+    Integer xpNeeded;
 }

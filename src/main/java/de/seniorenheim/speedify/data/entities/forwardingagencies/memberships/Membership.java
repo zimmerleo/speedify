@@ -20,18 +20,19 @@ public class Membership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private ForwardingAgency forwardingAgency;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User user;
 
     @Column(nullable = false)
     private LocalDate since;
 
-    private LocalDate until;
+    @Builder.Default
+    private LocalDate until = null;
 
     @ManyToOne
     @JoinColumn(nullable = false)

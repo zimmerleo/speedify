@@ -3,6 +3,7 @@ package de.seniorenheim.speedify.data.entities.finance;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,16 +18,16 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private BankAccount payer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private BankAccount payee;
 
-    @Column(nullable = false)
-    private double amount;
+    @Column(scale = 2, nullable = false)
+    private BigDecimal amount;
 
     @Column(nullable = false)
     private String purpose;

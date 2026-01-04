@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * DTO for {@link Rank}
@@ -18,4 +17,5 @@ public class RankResponseDto implements Serializable {
     Long id;
     String name;
     RankResponseDto superior;
+    Integer xpNeeded;
 }

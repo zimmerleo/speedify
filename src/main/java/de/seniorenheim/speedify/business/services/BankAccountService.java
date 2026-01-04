@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
 
@@ -17,6 +18,7 @@ import java.util.Random;
 public class BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
+    private final Random random = new Random();
 
     public List<BankAccount> getAll() {
         return bankAccountRepository.findAll();
@@ -28,49 +30,36 @@ public class BankAccountService {
 
     @Transactional
     public BankAccount createUserAccount() {
-        BankAccount.BankAccountBuilder bankAccount = BankAccount.builder();
-        String iban;
-
-        do {
-            iban = randomizeIban();
-        } while (bankAccountRepository.findByIban(iban).isPresent());
-
-        bankAccount.iban(iban);
-        return bankAccountRepository.save(bankAccount.build());
+        BankAccount bankAccount = BankAccount.builder()
+                .iban(randomizeIban())
+                .build();
+        return bankAccountRepository.save(bankAccount);
     }
 
     @Transactional
-    public BankAccount createForwardingAgencyAccount(Double capitalStock) {
-        BankAccount.BankAccountBuilder bankAccount = BankAccount.builder();
-        String iban;
-
-        do {
-            iban = randomizeIban();
-        } while (bankAccountRepository.findByIban(iban).isPresent());
-
-        bankAccount.iban(iban);
-        bankAccount.balance(capitalStock);
-        return bankAccountRepository.save(bankAccount.build());
+    public BankAccount createForwardingAgencyAccount(BigDecimal capitalStock) {
+        BankAccount bankAccount = BankAccount.builder()
+                .iban(randomizeIban())
+                .balance(capitalStock)
+                .build();
+        return bankAccountRepository.save(bankAccount);
     }
 
     @Transactional
-    public void update(String iban, Double amount) {
+    public void update(String iban, BigDecimal amount) {
         BankAccount entity = getByIban(iban);
-        entity.setBalance(entity.getBalance() + amount);
+        entity.setBalance(entity.getBalance().add(amount));
         bankAccountRepository.save(entity);
     }
 
-    @Transactional
-    public void delete(Long id) {
-        bankAccountRepository.deleteById(id);
-    }
-
     private String randomizeIban() {
-        Random random = new Random();
-        String iban = "ET52";
-        for (int i = 0; i < 19; i++) {
-            iban.concat(String.valueOf(random.nextInt(10)));
-        }
+        String iban;
+        do {
+            iban = "ET52";
+            for (int i = 1; i < 19; i++) {
+                iban = iban.concat(String.valueOf(random.nextInt(10)));
+            }
+        } while (bankAccountRepository.findByIban(iban).isPresent());
         return iban;
     }
 }

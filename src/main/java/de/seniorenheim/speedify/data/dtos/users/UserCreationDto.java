@@ -18,6 +18,5 @@ public class UserCreationDto implements Serializable {
     String name;
     String email;
     String password;
-    Boolean administrator;
     List<Long> dlcs;
 }

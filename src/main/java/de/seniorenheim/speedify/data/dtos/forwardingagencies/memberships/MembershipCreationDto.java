@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * DTO for {@link Membership}
@@ -15,9 +14,6 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 public class MembershipCreationDto implements Serializable {
-    Long forwardingAgency;
     Long user;
-    LocalDate since;
-    LocalDate until;
     Long role;
 }

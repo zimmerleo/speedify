@@ -23,6 +23,4 @@ public class CountryService {
     public Country getById(long id) {
         return countryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-
-
 }

@@ -23,6 +23,4 @@ public class DLCService {
     public DLC getById(long id) {
         return dlcRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-
-
 }

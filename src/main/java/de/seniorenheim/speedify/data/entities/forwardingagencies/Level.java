@@ -17,4 +17,11 @@ public class Level {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Level superior;
+
+    @Column(nullable = false)
+    private Integer xpNeeded;
 }

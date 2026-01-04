@@ -8,8 +8,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
-
 @Getter
 @Setter
 @Builder
@@ -31,7 +29,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private BankAccount bankAccount;
 
@@ -45,9 +43,9 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "dlc_id")
     )
-    @Builder.Default
-    private List<DLC> dlcs = emptyList();
+    private List<DLC> dlcs;
 
     @Column(nullable = false)
-    private LocalDateTime creationDate;
+    @Builder.Default
+    private LocalDateTime creationDate = LocalDateTime.now();
 }

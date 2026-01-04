@@ -4,8 +4,6 @@ import de.seniorenheim.speedify.data.entities.finance.BankAccount;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Builder
@@ -24,7 +22,7 @@ public class ForwardingAgency {
     @Column(length = 1000)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Level level;
 
@@ -32,12 +30,12 @@ public class ForwardingAgency {
     @Builder.Default
     private Integer xp = 0;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private LegalForm legalForm;
 
-    @OneToMany
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private List<BankAccount> bankAccounts;
+    private BankAccount bankAccount;
 
 }

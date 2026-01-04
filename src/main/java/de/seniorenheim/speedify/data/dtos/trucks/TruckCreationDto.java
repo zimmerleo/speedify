@@ -16,5 +16,4 @@ import java.io.Serializable;
 public class TruckCreationDto implements Serializable {
     String licensePlate;
     Long type;
-    Long owner;
 }

@@ -15,8 +15,6 @@ import java.util.List;
 public class CityService {
 
     private final CityRepository cityRepository;
-    private final CountryService countryService;
-    private final DLCService dlcService;
 
     public List<City> getAll() {
         return cityRepository.findAll();
@@ -25,10 +23,4 @@ public class CityService {
     public City getById(long id) {
         return cityRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-
-    public List<City> getAllByCountry(long id) {
-        return cityRepository.findCitiesByLocatedInIdEquals(id);
-    }
-
-
 }

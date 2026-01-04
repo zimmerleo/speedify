@@ -23,6 +23,7 @@ import de.seniorenheim.speedify.data.dtos.trucks.TruckTypeResponseDto;
 import de.seniorenheim.speedify.data.dtos.users.RankResponseDto;
 import de.seniorenheim.speedify.data.dtos.users.SpecializationResponseDto;
 import de.seniorenheim.speedify.data.dtos.users.UserResponseDto;
+import de.seniorenheim.speedify.data.dtos.users.UserSpecializationResponseDto;
 import de.seniorenheim.speedify.data.entities.dlcs.DLC;
 import de.seniorenheim.speedify.data.entities.finance.BankAccount;
 import de.seniorenheim.speedify.data.entities.finance.Transaction;
@@ -46,7 +47,10 @@ import de.seniorenheim.speedify.data.entities.trucks.TruckType;
 import de.seniorenheim.speedify.data.entities.users.Rank;
 import de.seniorenheim.speedify.data.entities.users.Specialization;
 import de.seniorenheim.speedify.data.entities.users.User;
+import de.seniorenheim.speedify.data.entities.users.UserSpecialization;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Component
 public class EntityMapper {
@@ -74,10 +78,11 @@ public class EntityMapper {
                 .origin(fromEntity(job.getOrigin()))
                 .destination(fromEntity(job.getDestination()))
                 .accepted(job.getAccepted())
-                .truck(fromEntity(job.getTruck()))
+                .truck(job.getTruck() != null ? fromEntity(job.getTruck()) : null)
                 .kilometersDriven(job.getKilometersDriven())
                 .hoursDriven(job.getHoursDriven())
                 .completed(job.getCompleted())
+                .xp(job.getXp())
                 .build();
     }
     public CityResponseDto fromEntity(City city){
@@ -85,8 +90,8 @@ public class EntityMapper {
                 .id(city.getId())
                 .name(city.getName())
                 .locatedIn(fromEntity(city.getLocatedIn()))
-                .dlc(fromEntity(city.getDlc()))
-                .companies(city.getCompanies().stream().map(this::fromEntity).toList())
+                .dlc(city.getDlc() != null ? fromEntity(city.getDlc()) : null)
+                .companies(new ArrayList<>(city.getCompanies().stream().map(this::fromEntity).toList()))
                 .build();
     }
 
@@ -94,6 +99,7 @@ public class EntityMapper {
         return CompanyResponseDto.builder()
                 .id(company.getId())
                 .name(company.getName())
+                .payloads(company.getPayloads().stream().map(this::fromEntity).toList())
                 .build();
     }
 
@@ -134,6 +140,8 @@ public class EntityMapper {
                 .password(user.getPassword())
                 .bankAccount(fromEntity(user.getBankAccount()))
                 .administrator(user.getAdministrator())
+                .dlcs(user.getDlcs().stream().map(this::fromEntity).toList())
+                .creationDate(user.getCreationDate())
                 .build();
     }
 
@@ -142,6 +150,7 @@ public class EntityMapper {
                 .id(rank.getId())
                 .name(rank.getName())
                 .superior(rank.getSuperior() != null ? fromEntity(rank.getSuperior()) : null)
+                .xpNeeded(rank.getXpNeeded())
                 .build();
     }
 
@@ -149,6 +158,15 @@ public class EntityMapper {
         return SpecializationResponseDto.builder()
                 .id(specialization.getId())
                 .name(specialization.getName())
+                .build();
+    }
+
+    public UserSpecializationResponseDto fromEntity(UserSpecialization userSpecialization){
+        return UserSpecializationResponseDto.builder()
+                .user(fromEntity(userSpecialization.getUser()))
+                .specialization(fromEntity(userSpecialization.getSpecialization()))
+                .rank(fromEntity(userSpecialization.getRank()))
+                .xp(userSpecialization.getXp())
                 .build();
     }
 
@@ -211,6 +229,8 @@ public class EntityMapper {
         return LevelResponseDto.builder()
                 .id(level.getId())
                 .name(level.getName())
+                .xpNeeded(level.getXpNeeded())
+                .superior(level.getSuperior().getId())
                 .build();
     }
 
@@ -230,7 +250,7 @@ public class EntityMapper {
                 .level(fromEntity(forwardingAgency.getLevel()))
                 .xp(forwardingAgency.getXp())
                 .legalForm(fromEntity(forwardingAgency.getLegalForm()))
-                .bankAccounts(forwardingAgency.getBankAccounts().stream().map(this::fromEntity).toList())
+                .bankAccount(fromEntity(forwardingAgency.getBankAccount()))
                 .build();
     }
 

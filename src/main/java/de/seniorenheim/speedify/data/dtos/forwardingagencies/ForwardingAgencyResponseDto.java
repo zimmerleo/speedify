@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * DTO for {@link ForwardingAgency}
@@ -22,5 +21,5 @@ public class ForwardingAgencyResponseDto implements Serializable {
     LevelResponseDto level;
     Integer xp;
     LegalFormResponseDto legalForm;
-    List<BankAccountResponseDto> bankAccounts;
+    BankAccountResponseDto bankAccount;
 }

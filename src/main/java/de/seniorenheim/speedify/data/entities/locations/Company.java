@@ -1,7 +1,10 @@
 package de.seniorenheim.speedify.data.entities.locations;
 
+import de.seniorenheim.speedify.data.entities.jobs.Payload;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,4 +20,12 @@ public class Company {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @ManyToMany
+    @JoinTable(
+            name = "companies_payloads",
+            joinColumns = @JoinColumn(name = "company_id"),
+            inverseJoinColumns = @JoinColumn(name = "payload_id")
+    )
+    private List<Payload> payloads;
 }

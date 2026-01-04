@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * DTO for {@link BankAccount}
@@ -15,5 +16,5 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class BankAccountResponseDto implements Serializable {
     String iban;
-    Double balance;
+    BigDecimal balance;
 }

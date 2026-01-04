@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 public class TransactionCreationDto implements Serializable {
     String payerIban;
     String payeeIban;
-    double amount;
+    BigDecimal amount;
     String purpose;
     LocalDateTime processedAt;
 }

@@ -24,5 +24,4 @@ public class CompanyService {
     public Company getById(long id) {
         return companyRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
-
 }

@@ -14,8 +14,6 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 public class ApplicationCreationDto implements Serializable {
-    Long forwardingAgency;
-    Long user;
     Long role;
     String text;
 }

@@ -18,7 +18,10 @@ public class Rank {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Rank superior;
+
+    @Column(nullable = false)
+    private Integer xpNeeded;
 }

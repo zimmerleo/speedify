@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * DTO for {@link LegalForm}
@@ -16,5 +17,5 @@ import java.io.Serializable;
 public class LegalFormResponseDto implements Serializable {
     Long id;
     String name;
-    Double capitalStock;
+    BigDecimal capitalStock;
 }
