@@ -16,5 +16,6 @@ import java.io.Serializable;
 public class ForwardingAgencyCreationDto implements Serializable {
     String name;
     String description;
+    String code;
     Long legalForm;
 }

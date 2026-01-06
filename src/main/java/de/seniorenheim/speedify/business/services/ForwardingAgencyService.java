@@ -38,12 +38,11 @@ public class ForwardingAgencyService {
     }
 
     @Transactional
-    public void save(ForwardingAgencyCreationDto  forwardingAgencyCreationDto) {
-        User user = AuthenticationUtils.getCurrentUser().getUser();
-        if (membershipService.getCurrentMembership(user.getId()) != null) return;
+    public void save(ForwardingAgencyCreationDto forwardingAgencyCreationDto) {
         LegalForm legalForm = legalFormService.getById(forwardingAgencyCreationDto.getLegalForm());
         ForwardingAgency entity = ForwardingAgency.builder()
                 .name(forwardingAgencyCreationDto.getName())
+                .code(forwardingAgencyCreationDto.getCode())
                 .description(forwardingAgencyCreationDto.getDescription())
                 .level(levelService.getFirst())
                 .legalForm(legalForm)
@@ -51,7 +50,7 @@ public class ForwardingAgencyService {
                 .build();
         entity = forwardingAgencyRepository.save(entity);
         membershipService.save(entity.getId(), MembershipCreationDto.builder()
-                .user(user.getId())
+                .user(AuthenticationUtils.getCurrentUser().getUser().getId())
                 .role(roleService.getLeader().getId())
                 .build());
     }
@@ -59,9 +58,18 @@ public class ForwardingAgencyService {
     @Transactional
     public void update(long id, ForwardingAgencyCreationDto forwardingAgencyCreationDto) {
         ForwardingAgency entity = getById(id);
-        entity.setName(forwardingAgencyCreationDto.getName());
-        entity.setDescription(forwardingAgencyCreationDto.getDescription());
-        entity.setLegalForm(legalFormService.getById(forwardingAgencyCreationDto.getLegalForm()));
+        if (forwardingAgencyCreationDto.getName() != null) {
+            entity.setName(forwardingAgencyCreationDto.getName());
+        }
+        if (forwardingAgencyCreationDto.getCode() != null) {
+            entity.setCode(forwardingAgencyCreationDto.getCode());
+        }
+        if (forwardingAgencyCreationDto.getDescription() != null) {
+            entity.setCode(forwardingAgencyCreationDto.getDescription());
+        }
+        if (forwardingAgencyCreationDto.getLegalForm() != null) {
+            entity.setLegalForm(legalFormService.getById(forwardingAgencyCreationDto.getLegalForm()));
+        }
         forwardingAgencyRepository.save(entity);
     }
 

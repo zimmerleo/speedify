@@ -2,6 +2,7 @@ package de.seniorenheim.speedify.data.entities.forwardingagencies;
 
 import de.seniorenheim.speedify.data.entities.finance.BankAccount;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 @Getter
@@ -18,6 +19,10 @@ public class ForwardingAgency {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    @Column(nullable = false, unique = true)
+    @Pattern(regexp = "^[A-Z]{3}$")
+    private String code;
 
     @Column(length = 1000)
     private String description;

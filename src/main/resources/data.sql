@@ -958,13 +958,12 @@ INSERT INTO ranks (id, name, superior_id, xp_needed) VALUES (1, 'Anfänger', 2, 
 INSERT INTO careers (id, name, description) VALUES (1, 'Operative', 'Durchführung des Betriebsgeschäfts'),
                                                    (2, 'Supportive', 'Durchführung von unterstützenden Tätigkeiten zugunsten des Betriebsgeschäfts'),
                                                    (3, 'Management', 'Fachliche und disziplinarische Führung einzelner Teile des Betriebsgeschäfts'),
-                                                   (4, 'Geschäftsführung', 'Strategische Leitung des Unternehmens');
+                                                   (9, 'Geschäftsführung', 'Strategische Leitung des Unternehmens');
 
 INSERT INTO roles (id, name, superior_id, career_id) VALUES (10, 'Junior Berufskraftfahrer', 11, 1),
                                                             (11, 'Berufskraftfahrer', 12, 1),
                                                             (12, 'Senior Berufskraftfahrer', 13, 1),
                                                             (13, 'Leitender Berufskraftfahrer', 30, 1),
-
                                                             (20, 'Junior Buchhalter', 21, 2),
                                                             (21, 'Buchhalter', 22, 2),
                                                             (22, 'Senior Buchhalter', 23, 2),
@@ -973,23 +972,21 @@ INSERT INTO roles (id, name, superior_id, career_id) VALUES (10, 'Junior Berufsk
                                                             (25, 'Analyst', 26, 2),
                                                             (26, 'Senior Analyst', 27, 2),
                                                             (27, 'Leitender Analyst', 36, 2),
-
                                                             (30, 'Operations Manager', 31, 3),
-                                                            (31, 'Senior Operations Manager', 40, 3),
+                                                            (31, 'Senior Operations Manager', 95, 3),
                                                             (32, 'Finance Manager', 33, 3),
-                                                            (33, 'Senior Finance Manager', 41, 3),
+                                                            (33, 'Senior Finance Manager', 96, 3),
                                                             (34, 'HR Manager', 35, 3),
-                                                            (35, 'Senior HR Manager', 42, 3),
+                                                            (35, 'Senior HR Manager', 97, 3),
                                                             (36, 'QA Manager', 37, 3),
-                                                            (37, 'Senior QA Manager', 40, 3),
+                                                            (37, 'Senior QA Manager', 95, 3),
                                                             (38, 'Marketing Manager', 39, 3),
-                                                            (39, 'Senior Marketing Manager', 43, 3),
-
-                                                            (40, 'Chief Operating Officer', 44, 4),
-                                                            (41, 'Chief Financial Officer', 44, 4),
-                                                            (42, 'Chief Recruiting Officer', 44, 4),
-                                                            (43, 'Chief Marketing Officer', 44, 4),
-                                                            (44, 'Chief Executive Officer', null, 4);
+                                                            (39, 'Senior Marketing Manager', 98, 3),
+                                                            (95, 'Chief Operating Officer', 99, 9),
+                                                            (96, 'Chief Financial Officer', 99, 9),
+                                                            (97, 'Chief Recruiting Officer', 99, 9),
+                                                            (98, 'Chief Marketing Officer', 99, 9),
+                                                            (99, 'Chief Executive Officer', null, 9);
 
 INSERT INTO legal_forms (name, capital_stock) VALUES ('Einzelunternehmen', 0.00),
                                                      ('GbR', 0.00),
@@ -1026,4 +1023,18 @@ INSERT INTO relation_types (name) VALUES ('Partnerschaft'),
                                          ('Rivalität'),
                                          ('Übernahme'),
                                          ('Subunternehmen');
+
+INSERT INTO transaction_purposes (purpose) VALUES ('Tanken'),
+                                                  ('Maut'),
+                                                  ('Gehaltszahlung'),
+                                                  ('Sozialabgaben'),
+                                                  ('Lohnsteuer (LSt)'),
+                                                  ('Einkommenssteuer (ESt)'),
+                                                  ('Gewerbesteuer (GSt)'),
+                                                  ('Umsatzsteuer (USt)'),
+                                                  ('Körperschaftssteuer (KSt)'),
+                                                  ('Hauptuntersuchung, KFZ-Steuer und -Versicherung'),
+                                                  ('Berufskraftfahrerqualifikation & EU-Gemeinschaftslizenz'),
+                                                  ('Rückerstattung'),
+                                                  ('Umsatz')
 

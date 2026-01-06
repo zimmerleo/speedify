@@ -16,9 +16,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class TransactionCreationDto implements Serializable {
-    String payerIban;
     String payeeIban;
     BigDecimal amount;
-    String purpose;
-    LocalDateTime processedAt;
+    Long purpose;
+    Long job;
 }

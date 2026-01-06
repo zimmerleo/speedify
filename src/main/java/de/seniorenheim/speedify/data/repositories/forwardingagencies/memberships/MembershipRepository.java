@@ -15,4 +15,6 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
     List<Membership> findAllByUser_Id(Long userId);
 
     List<Membership> findAllByForwardingAgency_Id(Long forwardingAgencyId);
+
+    List<Membership> findAllByUntil(LocalDate until);
 }

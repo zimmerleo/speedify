@@ -58,16 +58,11 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void update(long id, UserCreationDto userDto) {
-        LoginUser loginUser = AuthenticationUtils.getCurrentUser();
-
-        if (!loginUser.getUser().getId().equals(id) && loginUser.getUser().getAdministrator().equals(Boolean.FALSE)) {
-            throw new AccessDeniedException("Access denied");
-        }
         User entity = getById(id);
-        entity.setName(userDto.getName());
-        entity.setEmail(userDto.getEmail());
-        entity.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        entity.setDlcs(new ArrayList<>(userDto.getDlcs().stream().map(dlcService::getById).toList()));
+        if (userDto.getName() != null) entity.setName(userDto.getName());
+        if (userDto.getEmail() != null) entity.setEmail(userDto.getEmail());
+        if (userDto.getPassword() != null) entity.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        if (!userDto.getDlcs().isEmpty()) entity.setDlcs(new ArrayList<>(userDto.getDlcs().stream().map(dlcService::getById).toList()));
         userRepository.save(entity);
     }
 
@@ -83,7 +78,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
         Membership membership = membershipService.getCurrentMembership(user.getId());
-        return new LoginUser(user, membership != null ? membership.getRole() : null);
+        return new LoginUser(user, membership != null ? membership.getRole() : null, membership != null ? membership.getForwardingAgency() : null);
     }
 
     @Bean

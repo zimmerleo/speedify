@@ -2,6 +2,7 @@ package de.seniorenheim.speedify.business.util;
 
 import de.seniorenheim.speedify.data.dtos.dlcs.DLCResponseDto;
 import de.seniorenheim.speedify.data.dtos.finance.BankAccountResponseDto;
+import de.seniorenheim.speedify.data.dtos.finance.TransactionPurposeResponseDto;
 import de.seniorenheim.speedify.data.dtos.finance.TransactionResponseDto;
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.ForwardingAgencyResponseDto;
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.LegalFormResponseDto;
@@ -27,6 +28,7 @@ import de.seniorenheim.speedify.data.dtos.users.UserSpecializationResponseDto;
 import de.seniorenheim.speedify.data.entities.dlcs.DLC;
 import de.seniorenheim.speedify.data.entities.finance.BankAccount;
 import de.seniorenheim.speedify.data.entities.finance.Transaction;
+import de.seniorenheim.speedify.data.entities.finance.TransactionPurpose;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgency;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.LegalForm;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.Level;
@@ -184,8 +186,16 @@ public class EntityMapper {
                 .payer(fromEntity(transaction.getPayer()))
                 .payee(fromEntity(transaction.getPayee()))
                 .amount(transaction.getAmount())
-                .purpose(transaction.getPurpose())
+                .purpose(fromEntity(transaction.getPurpose()))
+                .job(transaction.getJob() != null ? fromEntity(transaction.getJob()) : null)
                 .processedAt(transaction.getProcessedAt())
+                .build();
+    }
+
+    public TransactionPurposeResponseDto fromEntity(TransactionPurpose transactionPurpose) {
+        return TransactionPurposeResponseDto.builder()
+                .id(transactionPurpose.getId())
+                .purpose(transactionPurpose.getPurpose())
                 .build();
     }
 
@@ -246,6 +256,7 @@ public class EntityMapper {
         return ForwardingAgencyResponseDto.builder()
                 .id(forwardingAgency.getId())
                 .name(forwardingAgency.getName())
+                .code(forwardingAgency.getCode())
                 .description(forwardingAgency.getDescription())
                 .level(fromEntity(forwardingAgency.getLevel()))
                 .xp(forwardingAgency.getXp())

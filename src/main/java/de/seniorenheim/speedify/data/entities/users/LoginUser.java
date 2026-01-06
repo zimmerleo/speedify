@@ -1,5 +1,6 @@
 package de.seniorenheim.speedify.data.entities.users;
 
+import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgency;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.memberships.roles.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,7 @@ public class LoginUser implements UserDetails {
 
     private final User user;
     private final Role role;
+    private final ForwardingAgency forwardingAgency;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -23,10 +25,18 @@ public class LoginUser implements UserDetails {
         if (Boolean.TRUE.equals(user.getAdministrator())) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
-        if (role != null) {
-            authorities.add(new SimpleGrantedAuthority("AGENCY_" + role.getName().toUpperCase().replace(" ", "_")));
+        if (role != null &&  forwardingAgency != null) {
+            authorities.add(new SimpleGrantedAuthority("AGENCY_" + forwardingAgency.getId() + "_" + role.getId()));
         }
         return authorities;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public ForwardingAgency getForwardingAgency() {
+        return forwardingAgency;
     }
 
     @Override

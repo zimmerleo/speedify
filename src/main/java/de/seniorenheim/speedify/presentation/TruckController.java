@@ -6,6 +6,7 @@ import de.seniorenheim.speedify.data.dtos.trucks.TruckCreationDto;
 import de.seniorenheim.speedify.data.dtos.trucks.TruckResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class TruckController {
     private final TruckService truckService;
     private final EntityMapper entityMapper;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TruckResponseDto> getAll() {
         return truckService.getAll().stream().map(entityMapper::fromEntity).toList();
@@ -33,7 +35,7 @@ public class TruckController {
         truckService.save(truckDto);
     }
 
-    @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable long id, @RequestBody TruckCreationDto truckDto) {
         truckService.update(id, truckDto);
     }

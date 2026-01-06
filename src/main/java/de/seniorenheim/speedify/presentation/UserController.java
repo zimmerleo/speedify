@@ -2,6 +2,7 @@ package de.seniorenheim.speedify.presentation;
 
 import de.seniorenheim.speedify.business.services.*;
 import de.seniorenheim.speedify.business.util.EntityMapper;
+import de.seniorenheim.speedify.data.dtos.finance.TransactionResponseDto;
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.memberships.ApplicationResponseDto;
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.memberships.MembershipResponseDto;
 import de.seniorenheim.speedify.data.dtos.trucks.TruckResponseDto;
@@ -26,12 +27,15 @@ public class UserController {
     private final ApplicationService applicationService;
     private final UserSpecializationService userSpecializationService;
     private final EntityMapper entityMapper;
+    private final TransactionService transactionService;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserResponseDto> getAll() {
         return userService.getAll().stream().map(entityMapper::fromEntity).toList();
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or #id == authentication.principal.user.id")
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserResponseDto getById(@PathVariable Long id) {
         return entityMapper.fromEntity(userService.getById(id));
@@ -42,7 +46,8 @@ public class UserController {
         userService.save(userCreationDto);
     }
 
-    @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or #id == authentication.principal.user.id")
+    @PatchMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable long id, @RequestBody UserCreationDto userCreationDto) {
         userService.update(id, userCreationDto);
     }
@@ -54,35 +59,48 @@ public class UserController {
     }
 
 
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or #id == authentication.principal.user.id")
     @GetMapping(value = "{id}/trucks", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TruckResponseDto> getTrucks(@PathVariable Long id) {
         return truckService.getAllByUserId(id).stream().map(entityMapper::fromEntity).toList();
     }
 
 
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or #id == authentication.principal.user.id")
     @GetMapping(value = "{id}/applications", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ApplicationResponseDto> getApplications(@PathVariable Long id) {
         return applicationService.getAllByUserId(id).stream().map(entityMapper::fromEntity).toList();
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or #id == authentication.principal.user.id")
+    @DeleteMapping(value = "{id}/applications/{applicationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteApplication(@PathVariable Long id, @PathVariable Long applicationId) {
+        applicationService.delete(applicationId);
+    }
 
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or #id == authentication.principal.user.id")
     @GetMapping(value = "{id}/memberships", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MembershipResponseDto> getMemberships(@PathVariable Long id) {
         return membershipService.getAllByUserId(id).stream().map(entityMapper::fromEntity).toList();
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or #id == authentication.principal.user.id")
     @GetMapping(value = "{id}/memberships/current", produces = MediaType.APPLICATION_JSON_VALUE)
     public MembershipResponseDto getCurrentMembership(@PathVariable Long id) {
         return entityMapper.fromEntity(membershipService.getCurrentMembership(id));
     }
 
 
-
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or #id == authentication.principal.user.id")
     @GetMapping(value = "{id}/specializations", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserSpecializationResponseDto> getSpecializations(@PathVariable Long id) {
         return userSpecializationService.getAllByUserId(id).stream().map(entityMapper::fromEntity).toList();
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or #id == authentication.principal.user.id")
+    @GetMapping(value = "{id}/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<TransactionResponseDto> getTransactions(@PathVariable Long id) {
+        return transactionService.getAllByCurrentUser().stream().map(entityMapper::fromEntity).toList();
     }
 }

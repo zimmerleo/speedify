@@ -1,9 +1,6 @@
 package de.seniorenheim.speedify.presentation;
 
-import de.seniorenheim.speedify.business.services.ApplicationService;
-import de.seniorenheim.speedify.business.services.ForwardingAgencyService;
-import de.seniorenheim.speedify.business.services.JobService;
-import de.seniorenheim.speedify.business.services.MembershipService;
+import de.seniorenheim.speedify.business.services.*;
 import de.seniorenheim.speedify.business.util.EntityMapper;
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.ForwardingAgencyCreationDto;
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.ForwardingAgencyResponseDto;
@@ -11,9 +8,13 @@ import de.seniorenheim.speedify.data.dtos.forwardingagencies.memberships.Applica
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.memberships.ApplicationResponseDto;
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.memberships.MembershipCreationDto;
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.memberships.MembershipResponseDto;
+import de.seniorenheim.speedify.data.dtos.forwardingagencies.relations.RelationCreationDto;
+import de.seniorenheim.speedify.data.dtos.forwardingagencies.relations.RelationResponseDto;
 import de.seniorenheim.speedify.data.dtos.jobs.JobResponseDto;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class ForwardingAgencyController {
     private final MembershipService membershipService;
     private final JobService jobService;
     private final EntityMapper entityMapper;
+    private final RelationService relationService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ForwardingAgencyResponseDto> getAll() {
@@ -40,24 +42,27 @@ public class ForwardingAgencyController {
         return entityMapper.fromEntity(forwardingAgencyService.getById(id));
     }
 
+    @PreAuthorize("!@authUtils.hasAnyAgencyRole()")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void save(@RequestBody ForwardingAgencyCreationDto forwardingAgencyCreationDto) {
+    public ResponseEntity<Void> save(@RequestBody ForwardingAgencyCreationDto forwardingAgencyCreationDto) {
         forwardingAgencyService.save(forwardingAgencyCreationDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("@authUtils.isCLevel(#id)")
+    @PatchMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@PathVariable long id, @RequestBody ForwardingAgencyCreationDto forwardingAgencyCreationDto) {
         forwardingAgencyService.update(id, forwardingAgencyCreationDto);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("@authUtils.isChiefExecutiveOfficer(#id)")
     @DeleteMapping(value = "{id}")
     public void delete(@PathVariable long id) {
         forwardingAgencyService.delete(id);
     }
 
 
-
+    @PreAuthorize("@authUtils.isOperations(#id) || @authUtils.isQA(#id) || @authUtils.isChiefExecutiveOfficer(#id)")
     @GetMapping(value = "{id}/jobs", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<JobResponseDto> getJobs(@PathVariable Long id) {
         return jobService.getAllByForwardingAgencyId(id).stream().map(entityMapper::fromEntity).toList();
@@ -65,16 +70,19 @@ public class ForwardingAgencyController {
 
 
 
+    @PreAuthorize("@authUtils.isHR(#id) || @authUtils.isChiefExecutiveOfficer(#id)")
     @GetMapping(value = "{id}/applications", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ApplicationResponseDto> getApplications(@PathVariable Long id) {
         return applicationService.getAllByForwardingAgencyId(id).stream().map(entityMapper::fromEntity).toList();
     }
 
+    @PreAuthorize("!@authUtils.isInAgency(#id)")
     @PostMapping(value = "{id}/applications", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void save(@PathVariable Long id, @RequestBody ApplicationCreationDto applicationCreationDto) {
+    public void saveApplication(@PathVariable Long id, @RequestBody ApplicationCreationDto applicationCreationDto) {
         applicationService.save(id, applicationCreationDto);
     }
 
+    @PreAuthorize("@authUtils.isHR(#id) || @authUtils.isChiefExecutiveOfficer(#id)")
     @DeleteMapping(value = "{id}/applications/{applicationId}")
     public void deleteApplication(@PathVariable Long id, @PathVariable Long applicationId) {
         applicationService.delete(applicationId);
@@ -87,18 +95,40 @@ public class ForwardingAgencyController {
         return membershipService.getAllByForwardingAgencyId(id).stream().map(entityMapper::fromEntity).toList();
     }
 
+    @PreAuthorize("@authUtils.isHR(#id) || @authUtils.isChiefExecutiveOfficer(#id)")
     @PostMapping(value = "{id}/memberships", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void save(@PathVariable Long id,  @RequestBody MembershipCreationDto membershipCreationDto) {
+    public void saveMembership(@PathVariable Long id,  @RequestBody MembershipCreationDto membershipCreationDto) {
         membershipService.save(id, membershipCreationDto);
     }
 
-    @PostMapping(value = "{id}/memberships/{membershipId}/end")
-    public void end(@PathVariable Long id, @PathVariable Long membershipId) {
+    @PreAuthorize("@authUtils.isManager(#id) || @authUtils.isCLevel(#id)")
+    @PatchMapping(value = "{id}/memberships/{membershipId}")
+    public void endMembership(@PathVariable Long id, @PathVariable Long membershipId) {
         membershipService.end(membershipId);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping(value = "{id}/memberships/{membershipId}")
     public void deleteMembership(@PathVariable Long id, @PathVariable Long membershipId) {
         membershipService.delete(membershipId);
+    }
+
+
+
+    @GetMapping(value = "{id}/relations", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<RelationResponseDto> getRelations(@PathVariable Long id) {
+        return relationService.getAllByForwardingAgencyId(id).stream().map(entityMapper::fromEntity).toList();
+    }
+
+    @PreAuthorize("@authUtils.isChiefExecutiveOfficer(#id)")
+    @PostMapping(value = "{id}/relations", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void saveRelation(@PathVariable Long id,  @RequestBody RelationCreationDto relationCreationDto) {
+        relationService.save(id, relationCreationDto);
+    }
+
+    @PreAuthorize("@authUtils.isChiefExecutiveOfficer(#id)")
+    @DeleteMapping(value = "{id}/relations/{forwardingAgencyId}")
+    public void deleteRelation(@PathVariable Long id, @PathVariable Long forwardingAgencyId) {
+        relationService.delete(id, forwardingAgencyId);
     }
 }

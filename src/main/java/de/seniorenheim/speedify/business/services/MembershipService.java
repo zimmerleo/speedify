@@ -1,7 +1,10 @@
 package de.seniorenheim.speedify.business.services;
 
+import de.seniorenheim.speedify.business.util.AuthenticationUtils;
 import de.seniorenheim.speedify.data.dtos.forwardingagencies.memberships.MembershipCreationDto;
+import de.seniorenheim.speedify.data.entities.forwardingagencies.memberships.Application;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.memberships.Membership;
+import de.seniorenheim.speedify.data.entities.forwardingagencies.memberships.roles.Role;
 import de.seniorenheim.speedify.data.repositories.forwardingagencies.ForwardingAgencyRepository;
 import de.seniorenheim.speedify.data.repositories.forwardingagencies.memberships.MembershipRepository;
 import de.seniorenheim.speedify.data.repositories.forwardingagencies.memberships.roles.RoleRepository;
@@ -24,6 +27,7 @@ public class MembershipService {
     private final UserRepository userRepository;
     private final ForwardingAgencyRepository forwardingAgencyRepository;
     private final RoleRepository roleRepository;
+    private final ApplicationService applicationService;
 
     public List<Membership> getAll() {
         return membershipRepository.findAll();
@@ -51,6 +55,9 @@ public class MembershipService {
         if (currentMembership != null) {
             end(currentMembership.getId());
         }
+        for (Application application : applicationService.getAllByUserId(membershipCreationDto.getUser())) {
+            applicationService.delete(application.getId());
+        }
         Membership entity = Membership.builder()
                 .user(userRepository.getReferenceById(membershipCreationDto.getUser()))
                 .forwardingAgency(forwardingAgencyRepository.getReferenceById(forwardingAgencyId))
@@ -63,6 +70,12 @@ public class MembershipService {
     @Transactional
     public void end(Long id) {
         Membership entity = getById(id);
+        Role superior = entity.getRole().getSuperior();
+
+        while (!superior.getId().equals(AuthenticationUtils.getCurrentUser().getRole().getId())) {
+            if (superior.getSuperior() == null) return;
+            superior = superior.getSuperior();
+        }
         entity.setUntil(LocalDate.now());
         membershipRepository.save(entity);
     }

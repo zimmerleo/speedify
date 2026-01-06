@@ -17,6 +17,7 @@ import java.io.Serializable;
 public class ForwardingAgencyResponseDto implements Serializable {
     Long id;
     String name;
+    String code;
     String description;
     LevelResponseDto level;
     Integer xp;

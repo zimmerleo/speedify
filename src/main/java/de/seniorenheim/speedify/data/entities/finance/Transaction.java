@@ -1,5 +1,6 @@
 package de.seniorenheim.speedify.data.entities.finance;
 
+import de.seniorenheim.speedify.data.entities.jobs.Job;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,8 +30,13 @@ public class Transaction {
     @Column(scale = 2, nullable = false)
     private BigDecimal amount;
 
-    @Column(nullable = false)
-    private String purpose;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private TransactionPurpose purpose;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Job job;
 
     @Column(nullable = false)
     private LocalDateTime processedAt;

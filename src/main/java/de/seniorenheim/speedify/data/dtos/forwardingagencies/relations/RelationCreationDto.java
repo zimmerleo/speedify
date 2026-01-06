@@ -14,7 +14,6 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 public class RelationCreationDto implements Serializable {
-    Long forwardingAgency_1;
     Long forwardingAgency_2;
     Long relationType;
 }

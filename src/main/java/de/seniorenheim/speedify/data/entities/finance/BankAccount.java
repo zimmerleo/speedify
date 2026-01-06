@@ -20,7 +20,7 @@ public class BankAccount {
 
     @Id
     @Pattern(regexp = "ET52\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d", message = "Invalid IBAN")
-    @Column(nullable = false, length = 22)
+    @Column(nullable = false, length = 22, unique = true)
     private String iban;
 
     @Column(scale = 2, nullable = false)

@@ -1,5 +1,6 @@
 package de.seniorenheim.speedify.data.dtos.finance;
 
+import de.seniorenheim.speedify.data.dtos.jobs.JobResponseDto;
 import de.seniorenheim.speedify.data.entities.finance.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class TransactionResponseDto implements Serializable {
     BankAccountResponseDto payer;
     BankAccountResponseDto payee;
     BigDecimal amount;
-    String purpose;
+    TransactionPurposeResponseDto purpose;
+    JobResponseDto job;
     LocalDateTime processedAt;
 }
