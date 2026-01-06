@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/speedify
+    username: ${SPEEDIFYDB_USER}
+    password: ${SPEEDIFYDB_PW}
+#logging:
+#  level:
+#    org.springframework.security: debug
