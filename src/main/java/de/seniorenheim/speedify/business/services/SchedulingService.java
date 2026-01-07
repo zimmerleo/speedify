@@ -1,5 +1,6 @@
 package de.seniorenheim.speedify.business.services;
 
+import de.seniorenheim.speedify.business.util.FinanceValues;
 import de.seniorenheim.speedify.data.dtos.finance.TransactionCreationDto;
 import de.seniorenheim.speedify.data.entities.finance.Transaction;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgency;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,36 +27,16 @@ public class SchedulingService {
     private final MembershipService  membershipService;
     private final ForwardingAgencyService forwardingAgencyService;
     private final Random random = new  Random();
+    private final TruckService truckService;
 
 
     @Scheduled(cron = "0 0 0 L * *")
     public void monthly() {
         List<Transaction> allTransactions = transactionService.getAllByProcessedAtAfter(LocalDateTime.now().minusMonths(1));
-
-        //Tank + Maut: User -> System | ForwardingAgency -> User
-        // Alle Transaktionen, die im letzten Monat durchgeführt wurden gruppiert nach transactionpurpose
-        // Membership raussuchen, bei der transaction.payer.user = membership.user und processedAt zwischen since und until ist
-        // ForwardingAgency aus der Membership holen
-        // Neue Transaction mit payer = forwardingagency und payee = user
-
-        log.info("Tank und Maut...");
-        List<Transaction> gasAndTollTransactions = new ArrayList<>(allTransactions).stream()
-                .filter(t -> t.getPurpose().getId().equals(1L) || t.getPurpose().getId().equals(2L)).toList();
-        doGasAndTolls(gasAndTollTransactions);
-        log.info("Tank und Maut rückerstattet.");
-
-        //Umsatz|Gehalt: System -> ForwardingAgency | ForwardingAgency -> User
-        // Alle Transaktionen, die im letzten Monat durchgeführt wurden gruppiert nach transactionpurpose
-        // Membership raussuchen, bei der transaction.job.truck.owner = membership.user und processedAt zwischen since und until ist
-        // ForwardingAgency aus der Membership holen
-        // Neue Transaction mit payer = forwardingagency und payee = user
-
-        log.info("Gehälter...");
-        List<Transaction> revenueTransactions = new ArrayList<>(allTransactions).stream()
-                .filter(t -> t.getPurpose().getId().equals(3L)).toList();
-        doPayChecks(revenueTransactions);
-        log.info("Gehälter gezahlt.");
-
+        doGasAndTolls(new ArrayList<>(allTransactions).stream()
+                .filter(t -> t.getPurpose().getId().equals(1L) || t.getPurpose().getId().equals(2L)).toList());
+        doPayChecks(new ArrayList<>(allTransactions).stream()
+                .filter(t -> t.getPurpose().getId().equals(3L)).toList());
     }
 
     private void doGasAndTolls(List<Transaction> gasAndTollTransactions) {
@@ -87,6 +69,7 @@ public class SchedulingService {
                         .build());
             }
         }
+        log.debug("Tank und Maut rückerstattet.");
     }
 
     private void doPayChecks(List<Transaction> revenueTransactions) {
@@ -150,6 +133,7 @@ public class SchedulingService {
                 }
             }
         }
+        log.debug("Gehälter gezahlt.");
     }
 
     @Scheduled(cron = "0 0 0 10 4,7,10,1 *")
@@ -172,8 +156,6 @@ public class SchedulingService {
             BigDecimal taxes = BigDecimal.ZERO;
             BigDecimal gstCompensation = mapEntry.getValue().multiply(BigDecimal.valueOf(0.035)).multiply(BigDecimal.valueOf(3.8));
             if (legalForm.equals(1L) || legalForm.equals(2L) || legalForm.equals(3L) || legalForm.equals(4L)) {
-                // Einkommenssteuer 0% bis 11604, 19% bis 17005, 33% bis 66760, 42% bis 277825, 45% ab 277826
-                log.info("Einkommenssteuer...");
                 if (mapEntry.getValue().compareTo(BigDecimal.valueOf(290100)) <= 0) return;
                 if (mapEntry.getValue().compareTo(BigDecimal.valueOf(425125)) <= 0) {
                     BigDecimal taxEligible = mapEntry.getValue().subtract(BigDecimal.valueOf(290100));
@@ -198,17 +180,15 @@ public class SchedulingService {
                         .purpose(13L)
                         .job(null)
                         .build());
-                log.info("Einkommenssteuer gezahlt.");
+                log.debug("Einkommenssteuer gezahlt.");
             } else {
-                // Körperschaftssteuer 15%
-                log.info("Körperschaftssteuer...");
                 transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
                         .payeeIban(null)
                         .amount(mapEntry.getValue().multiply(BigDecimal.valueOf(0.15)))
                         .purpose(16L)
                         .job(null)
                         .build());
-                log.info("Körperschaftssteuer gezahlt.");
+                log.debug("Körperschaftssteuer gezahlt.");
             }
         }
     }
@@ -216,7 +196,6 @@ public class SchedulingService {
     @Scheduled(cron = "0 0 0 15 2,5,8,11 *")
     public void gst() {
         // Gewerbesteuer = 3.5% * Gewerbeertrag * Hebesatz; 3.5% * Gewerbeertrag * 3.8 Anrechung auf ESt aber nicht auf KSt
-        log.info("Gewerbesteuer...");
         List<Transaction> allTransactions = transactionService.getAllByProcessedAtAfter(LocalDateTime.now().minusMonths(3));
         Map<String, BigDecimal> revenueTransactions = new ArrayList<>(allTransactions).stream()
                 .filter(t -> t.getPurpose().getId().equals(3L))
@@ -230,19 +209,43 @@ public class SchedulingService {
                     .purpose(14L)
                     .job(null)
                     .build());
-            log.info("Gewerbesteuer gezahlt.");
+            log.debug("Gewerbesteuer gezahlt.");
         }
     }
 
     @Scheduled(cron = "0 0 0 1 1 *")
     public void yearly() {
-        log.info("Unfallversicherung...");
-        // KFZ-Steuer 1500-2000€ / LKW
-        // KFZ-Versicherung 4000 HP + 3000 VK
-        // Hauptuntersuchung 150€ / LKW
-        log.info("KFZ-Steuer, KFZ-Versicherung und Hauptuntersuchung...");
-        // Berufskraftfahrerqualifikation (BKrFQ) - Weiterbildung 100€
-        // EU-Gemeinschaftslizenz für den Güterkraftverkehr 100€ + 10€ / Kopie
-        log.info("Berufskraftfahrerqualifikation und EU-Gemeinschaftslizenz...");
+        for (ForwardingAgency forwardingAgency : forwardingAgencyService.getAll()) {
+            List<Membership> currentMemberships = membershipService.getAll().stream().filter(m -> m.getForwardingAgency().getId().equals(forwardingAgency.getId()) && m.getUntil().equals(LocalDate.of(9999, 12, 31))).toList();
+            if (currentMemberships.isEmpty()) {
+                forwardingAgencyService.delete(forwardingAgency.getId());
+                log.debug("ForwardingAgency {} wurde aufgrund keiner Mitgliedschaften gelöscht.", forwardingAgency.getId());
+                continue;
+            }
+            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
+                    .payeeIban(null)
+                    .amount(BigDecimal.valueOf(100).multiply(BigDecimal.valueOf(currentMemberships.size())))
+                    .purpose(18L)
+                    .job(null)
+                    .build());
+            int truckCount = 0;
+            for (Membership membership : currentMemberships) {
+                truckCount += truckService.getAllByUserId(membership.getUser().getId()).size();
+            }
+            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
+                    .payeeIban(null)
+                    .amount(BigDecimal.valueOf(8900).multiply(BigDecimal.valueOf(truckCount)))
+                    .purpose(18L)
+                    .job(null)
+                    .build());
+            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
+                    .payeeIban(null)
+                    .amount(BigDecimal.valueOf(100).add(BigDecimal.valueOf(10).multiply(BigDecimal.valueOf(truckCount))))
+                    .purpose(17L)
+                    .job(null)
+                    .build());
+        }
+        log.debug("Berufskraftfahrerqualifikation und EU-Gemeinschaftslizenz gezahlt.");
+        log.debug("KFZ-Steuer, KFZ-Versicherung und Hauptuntersuchung gezahlt.");
     }
 }

@@ -367,6 +367,7 @@ VALUES (null, 2, 'Aberdeen'),
        (3, 34, 'Fier'),
        (3, 34, 'Tirana'),
        (3, 34, 'Vlorë'),
+       (2, 35, 'Argostoli'),
        (2, 35, 'Athen'),
        (2, 35, 'Chania'),
        (2, 35, 'Chios'),
@@ -418,6 +419,7 @@ VALUES ('AA - Auto di Alonso'),
        ('Bosfir Komerc'),
        ('Brawen Transport'),
        ('BTS Petrol'),
+       ('Byggpro'),
        ('Cantera Ibérica'),
        ('Canteras del Sur'),
        ('Cantiere Navale'),
@@ -513,6 +515,7 @@ VALUES ('AA - Auto di Alonso'),
        ('MarmoSpA'),
        ('Medas'),
        ('Metallurgy Muromets'),
+       ('Mijölnir Mining'),
        ('Mirosol'),
        ('MS Stein'),
        ('MVM Carrière'),
@@ -587,6 +590,7 @@ VALUES ('AA - Auto di Alonso'),
        ('Tesoro Gustoso'),
        ('The Train Foundry'),
        ('Timber Turtle'),
+       ('TQG'),
        ('Tradeaux'),
        ('Trade Market Istanbul'),
        ('Trameri'),
@@ -614,6 +618,196 @@ VALUES ('AA - Auto di Alonso'),
        ('WGCC'),
        ('Wilnet Transport'),
        ('Zelyonyye Polya');
+
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'ACC'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'Cantera Ibérica'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'CNP'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'Exomar'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'IKA Bohag'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'Lavish Foods'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'Logística Atlântica'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'Marina'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'RTLOG'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'A Coruña'), (SELECT id FROM companies WHERE name LIKE 'TREE-ET'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aalborg'), (SELECT id FROM companies WHERE name LIKE 'Freyr'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aalborg'), (SELECT id FROM companies WHERE name LIKE 'IKA Bohag'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aalborg'), (SELECT id FROM companies WHERE name LIKE 'Nordic Crown'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aalborg'), (SELECT id FROM companies WHERE name LIKE 'Norrsken'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aalborg'), (SELECT id FROM companies WHERE name LIKE 'NS Oil'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aalborg'), (SELECT id FROM companies WHERE name LIKE 'Polar Fish'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aalborg'), (SELECT id FROM companies WHERE name LIKE 'Vitas Power'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aarhus'), (SELECT id FROM companies WHERE name LIKE 'Container Port'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aarhus'), (SELECT id FROM companies WHERE name LIKE 'Drekkar Trans'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aarhus'), (SELECT id FROM companies WHERE name LIKE 'IKA Bohag'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aarhus'), (SELECT id FROM companies WHERE name LIKE 'Nordic Crown'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aarhus'), (SELECT id FROM companies WHERE name LIKE 'Sanbuilders'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aarhus'), (SELECT id FROM companies WHERE name LIKE 'WGCC'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aarhus'), (SELECT id FROM companies WHERE name LIKE 'TQG'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aberdeen'), (SELECT id FROM companies WHERE name LIKE 'NBFC'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aberdeen'), (SELECT id FROM companies WHERE name LIKE 'Stokes'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Aberdeen'), (SELECT id FROM companies WHERE name LIKE 'TREE-ET'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ajaccio'), (SELECT id FROM companies WHERE name LIKE 'BHV'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ajaccio'), (SELECT id FROM companies WHERE name LIKE 'Huilant'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ajaccio'), (SELECT id FROM companies WHERE name LIKE 'Kaarfor'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ajaccio'), (SELECT id FROM companies WHERE name LIKE 'Lisette Logistics'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ajaccio'), (SELECT id FROM companies WHERE name LIKE 'Marina'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ajaccio'), (SELECT id FROM companies WHERE name LIKE 'MVM Carrière'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ajaccio'), (SELECT id FROM companies WHERE name LIKE 'Tradeaux'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Albacete'), (SELECT id FROM companies WHERE name LIKE 'BHV'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Albacete'), (SELECT id FROM companies WHERE name LIKE 'Huerta del Mar Menor'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Albacete'), (SELECT id FROM companies WHERE name LIKE 'Logística Atlântica'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Albacete'), (SELECT id FROM companies WHERE name LIKE 'SuperCesta'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Albacete'), (SELECT id FROM companies WHERE name LIKE 'Volvo'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ålesund'), (SELECT id FROM companies WHERE name LIKE 'Container Port'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ålesund'), (SELECT id FROM companies WHERE name LIKE 'GNT'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ålesund'), (SELECT id FROM companies WHERE name LIKE 'Polar Fish'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ålesund'), (SELECT id FROM companies WHERE name LIKE 'Shuttle Cola'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Ålesund'), (SELECT id FROM companies WHERE name LIKE 'WGCC'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Algeciras'), (SELECT id FROM companies WHERE name LIKE 'Cesta'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Algeciras'), (SELECT id FROM companies WHERE name LIKE 'CNP'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Algeciras'), (SELECT id FROM companies WHERE name LIKE 'Eolo Lines'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Algeciras'), (SELECT id FROM companies WHERE name LIKE 'Ocean Solution Group'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Algeciras'), (SELECT id FROM companies WHERE name LIKE 'Transportes Caballería'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Algeciras'), (SELECT id FROM companies WHERE name LIKE 'TS Atlas'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Almaraz'), (SELECT id FROM companies WHERE name LIKE 'Iberatómica'));
+INSERT INTO cities_companies (city_id, company_id) VALUES
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Almería'), (SELECT id FROM companies WHERE name LIKE 'Canteras del Sur')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Almería'), (SELECT id FROM companies WHERE name LIKE 'Eolo Lines')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Almería'), (SELECT id FROM companies WHERE name LIKE 'FLE')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Almería'), (SELECT id FROM companies WHERE name LIKE 'Logística Atlântica')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Almería'), (SELECT id FROM companies WHERE name LIKE 'Vitas Power'));
+INSERT INTO cities_companies (city_id, company_id) VALUES
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Alta'), (SELECT id FROM companies WHERE name LIKE 'Byggpro')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Alta'), (SELECT id FROM companies WHERE name LIKE 'Norrsken')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Alta'), (SELECT id FROM companies WHERE name LIKE 'Polar Fish'));
+INSERT INTO cities_companies (city_id, company_id) VALUES
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Amsterdam'), (SELECT id FROM companies WHERE name LIKE 'Kaarfor')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Amsterdam'), (SELECT id FROM companies WHERE name LIKE 'LKW')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Amsterdam'), (SELECT id FROM companies WHERE name LIKE 'Stokes')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Amsterdam'), (SELECT id FROM companies WHERE name LIKE 'Trameri'));
+INSERT INTO cities_companies (city_id, company_id) VALUES
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Ancona'), (SELECT id FROM companies WHERE name LIKE 'Cantiere Navale')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Ancona'), (SELECT id FROM companies WHERE name LIKE 'CNP')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Ancona'), (SELECT id FROM companies WHERE name LIKE 'Exomar')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Ancona'), (SELECT id FROM companies WHERE name LIKE 'IKA Bohag')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Ancona'), (SELECT id FROM companies WHERE name LIKE 'Libellula')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Ancona'), (SELECT id FROM companies WHERE name LIKE 'Marina')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Ancona'), (SELECT id FROM companies WHERE name LIKE 'Terminal Container'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Argostoli'), (SELECT id FROM companies WHERE name LIKE 'Hotel Artemia'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Argostoli'), (SELECT id FROM companies WHERE name LIKE 'Icaria'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Argostoli'), (SELECT id FROM companies WHERE name LIKE 'Low Field'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Argostoli'), (SELECT id FROM companies WHERE name LIKE 'Medas'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Argostoli'), (SELECT id FROM companies WHERE name LIKE 'Rock Eater Quarry'));
+INSERT INTO cities_companies (city_id, company_id) VALUES
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Andenes'), (SELECT id FROM companies WHERE name LIKE 'Norrfood')),
+                                                       ((SELECT id FROM cities WHERE name LIKE 'Andenes'), (SELECT id FROM companies WHERE name LIKE 'Renar Logistik'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Andenes'), (SELECT id FROM companies WHERE name LIKE 'Byggpro'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Arvidsjaur'), (SELECT id FROM companies WHERE name LIKE 'Renar Logistik'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Arvidsjaur'), (SELECT id FROM companies WHERE name LIKE 'Sanbuilders'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Arvidsjaur'), (SELECT id FROM companies WHERE name LIKE 'Mijölnir Mining'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Athen'), (SELECT id FROM companies WHERE name LIKE 'CNP'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Athen'), (SELECT id FROM companies WHERE name LIKE 'Dimitriou'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Athen'), (SELECT id FROM companies WHERE name LIKE 'Eolo Lines'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Athen'), (SELECT id FROM companies WHERE name LIKE 'Icaria'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Athen'), (SELECT id FROM companies WHERE name LIKE 'Medas'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Athen'), (SELECT id FROM companies WHERE name LIKE 'Ocean Solution Group'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Athen'), (SELECT id FROM companies WHERE name LIKE 'Rock Eater Quarry'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Athen'), (SELECT id FROM companies WHERE name LIKE 'Villco'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bacău'), (SELECT id FROM companies WHERE name LIKE 'Brawen Transport'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Badajoz'), (SELECT id FROM companies WHERE name LIKE 'APP'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Badajoz'), (SELECT id FROM companies WHERE name LIKE 'Casa Olivera'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Badajoz'), (SELECT id FROM companies WHERE name LIKE 'Engeron'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Badajoz'), (SELECT id FROM companies WHERE name LIKE 'Lavish Foods'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Badajoz'), (SELECT id FROM companies WHERE name LIKE 'SuperCesta'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bailén'), (SELECT id FROM companies WHERE name LIKE 'Domdepo'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'AI Automotive'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Jastuk'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Radus'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Syllurgy'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Vesna'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Brawen Transport'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'ITCC'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Bosfir Komerc'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banská Bystrica'), (SELECT id FROM companies WHERE name LIKE 'EuroGoodies'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banská Bystrica'), (SELECT id FROM companies WHERE name LIKE 'Posped'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banská Bystrica'), (SELECT id FROM companies WHERE name LIKE 'Stokes'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banská Bystrica'), (SELECT id FROM companies WHERE name LIKE 'TREE-ET'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'Cesta'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'CGLA'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'NS Chemicals'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'Ortiz'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'RTLOG'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'Transportes Caballería'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'Construcciones Elcano'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'FLE'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'TS Atlas'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'Terminal Container'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'Marina'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'ACI SRL'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'Trasporti Mediterraneo'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'QuadrelliSpA'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bailén'), (SELECT id FROM companies WHERE name LIKE 'Domdepo'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'AI Automotive'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Jastuk'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Radus'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Syllurgy'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Vesna'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Brawen Transport'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'ITCC'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banja Luka'), (SELECT id FROM companies WHERE name LIKE 'Bosfir Komerc'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banská Bystrica'), (SELECT id FROM companies WHERE name LIKE 'EuroGoodies'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banská Bystrica'), (SELECT id FROM companies WHERE name LIKE 'Posped'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banská Bystrica'), (SELECT id FROM companies WHERE name LIKE 'Stokes'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Banská Bystrica'), (SELECT id FROM companies WHERE name LIKE 'TREE-ET'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'Cesta'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'CGLA'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'NS Chemicals'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'Ortiz'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'RTLOG'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'Transportes Caballería'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'Construcciones Elcano'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'FLE'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Barcelona'), (SELECT id FROM companies WHERE name LIKE 'TS Atlas'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'Terminal Container'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'Marina'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'ACI SRL'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'Trasporti Mediterraneo'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bari'), (SELECT id FROM companies WHERE name LIKE 'QuadrelliSpA'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bastia'), (SELECT id FROM companies WHERE name LIKE 'BHV'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bastia'), (SELECT id FROM companies WHERE name LIKE 'FLE'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bastia'), (SELECT id FROM companies WHERE name LIKE 'GNT'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bastia'), (SELECT id FROM companies WHERE name LIKE 'Kaarfor'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bastia'), (SELECT id FROM companies WHERE name LIKE 'Dans le Jardin'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bastia'), (SELECT id FROM companies WHERE name LIKE 'MVM Carrière'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bayonne'), (SELECT id FROM companies WHERE name LIKE 'Bâtisse'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bayonne'), (SELECT id FROM companies WHERE name LIKE 'BHV'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bayonne'), (SELECT id FROM companies WHERE name LIKE 'Boisserie Jean-Pierre'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bayonne'), (SELECT id FROM companies WHERE name LIKE 'Dans le Jardin'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bayonne'), (SELECT id FROM companies WHERE name LIKE 'Éco'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bayonne'), (SELECT id FROM companies WHERE name LIKE 'Lisette Logistics'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bayonne'), (SELECT id FROM companies WHERE name LIKE 'MVM Carrière'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bayonne'), (SELECT id FROM companies WHERE name LIKE 'Wilnet Transport'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Beja'), (SELECT id FROM companies WHERE name LIKE 'Huerta del Mar Menor'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'AI Automotive'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Eumefa'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'PIAC'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Shuttle Cola'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'SCS Paper'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Syschema'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Vesna'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'IKA Bohag'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Vitas Power'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Sanbuilders'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Luka DunaVia'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Rock Eater Quarry'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Villco'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Belgrad'), (SELECT id FROM companies WHERE name LIKE 'Syllurgy'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bergen'), (SELECT id FROM companies WHERE name LIKE 'Drekkar Trans'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bergen'), (SELECT id FROM companies WHERE name LIKE 'Nordic Crown'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bergen'), (SELECT id FROM companies WHERE name LIKE 'Polar Fish'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bergen'), (SELECT id FROM companies WHERE name LIKE 'GNT'));
+INSERT INTO cities_companies (city_id, company_id) VALUES ((SELECT id FROM cities WHERE name LIKE 'Bergen'), (SELECT id FROM companies WHERE name LIKE 'Polaris Lines'));
+
 
 INSERT INTO truck_types (name) VALUES ('DAF XF105'),('DAF NGD'),('DAF XD'),('DAF XF Electric'),('DAF XF'),
                                       ('Iveco Stralis'),('Iveco Stralis Hi-Way'),('Iveco S-Way'),
