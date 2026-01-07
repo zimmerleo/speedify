@@ -46,7 +46,11 @@ public class MembershipService {
     }
 
     public Membership getCurrentMembership(Long userId) {
-        return membershipRepository.findByUser_IdAndUntil(userId, null).orElse(null);
+        return membershipRepository.findByUser_IdAndUntil(userId, LocalDate.of(9999, 12, 31)).orElse(null);
+    }
+
+    public Membership getByUserAndTimestampBetweenSinceAndUntil(Long userId, LocalDate timestamp) {
+        return membershipRepository.findByUser_IdAndSinceBeforeOrSinceEqualsAndUntilAfter(userId, timestamp, timestamp, timestamp).orElseThrow(EntityNotFoundException::new);
     }
 
     @Transactional
@@ -63,6 +67,7 @@ public class MembershipService {
                 .forwardingAgency(forwardingAgencyRepository.getReferenceById(forwardingAgencyId))
                 .role(roleRepository.getReferenceById(membershipCreationDto.getRole()))
                 .since(LocalDate.now())
+                .until(LocalDate.of(9999, 12, 31))
                 .build();
         membershipRepository.save(entity);
     }

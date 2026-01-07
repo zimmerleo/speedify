@@ -19,11 +19,11 @@ public class Truck {
     @Column(nullable = false)
     private String licensePlate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private TruckType type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private User owner;
 }

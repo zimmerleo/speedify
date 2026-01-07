@@ -6,7 +6,6 @@ import de.seniorenheim.speedify.data.dtos.forwardingagencies.memberships.Members
 import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgency;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.LegalForm;
 import de.seniorenheim.speedify.data.entities.jobs.Job;
-import de.seniorenheim.speedify.data.entities.users.User;
 import de.seniorenheim.speedify.data.repositories.forwardingagencies.ForwardingAgencyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -35,6 +34,10 @@ public class ForwardingAgencyService {
 
     public ForwardingAgency getById(Long id) {
         return forwardingAgencyRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public ForwardingAgency getByIban(String iban) {
+        return forwardingAgencyRepository.findByBankAccount_Iban(iban).orElseThrow(EntityNotFoundException::new);
     }
 
     @Transactional

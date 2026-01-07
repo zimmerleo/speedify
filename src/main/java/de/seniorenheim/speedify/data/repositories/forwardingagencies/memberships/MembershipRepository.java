@@ -1,6 +1,7 @@
 package de.seniorenheim.speedify.data.repositories.forwardingagencies.memberships;
 
 import de.seniorenheim.speedify.data.entities.forwardingagencies.memberships.Membership;
+import de.seniorenheim.speedify.data.entities.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,5 +17,7 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
 
     List<Membership> findAllByForwardingAgency_Id(Long forwardingAgencyId);
 
-    List<Membership> findAllByUntil(LocalDate until);
+    Long user(User user);
+
+    Optional<Membership> findByUser_IdAndSinceBeforeOrSinceEqualsAndUntilAfter(Long userId, LocalDate sinceBefore, LocalDate since, LocalDate untilAfter);
 }

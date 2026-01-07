@@ -4,6 +4,9 @@ import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgenc
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ForwardingAgencyRepository extends JpaRepository<ForwardingAgency, Long> {
+    Optional<ForwardingAgency> findByBankAccount_Iban(String bankAccountIban);
 }

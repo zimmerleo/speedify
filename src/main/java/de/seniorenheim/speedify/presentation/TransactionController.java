@@ -5,7 +5,6 @@ import de.seniorenheim.speedify.business.util.AuthenticationUtils;
 import de.seniorenheim.speedify.business.util.EntityMapper;
 import de.seniorenheim.speedify.data.dtos.finance.TransactionCreationDto;
 import de.seniorenheim.speedify.data.dtos.finance.TransactionResponseDto;
-import de.seniorenheim.speedify.data.entities.finance.Transaction;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;

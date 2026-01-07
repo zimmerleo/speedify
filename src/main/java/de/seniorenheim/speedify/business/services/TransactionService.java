@@ -4,7 +4,6 @@ import de.seniorenheim.speedify.business.util.AuthenticationUtils;
 import de.seniorenheim.speedify.data.dtos.finance.TransactionCreationDto;
 import de.seniorenheim.speedify.data.entities.finance.BankAccount;
 import de.seniorenheim.speedify.data.entities.finance.Transaction;
-import de.seniorenheim.speedify.data.entities.jobs.Job;
 import de.seniorenheim.speedify.data.entities.users.LoginUser;
 import de.seniorenheim.speedify.data.repositories.finance.TransactionPurposeRepository;
 import de.seniorenheim.speedify.data.repositories.finance.TransactionRepository;
@@ -14,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,6 +30,10 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
+    public List<Transaction> getAllByProcessedAtAfter(LocalDateTime timestamp) {
+        return transactionRepository.findAllByProcessedAtAfter(timestamp);
+    }
+
     public List<Transaction> getAllByCurrentUser() {
         LoginUser loginUser = AuthenticationUtils.getCurrentUser();
         String iban = loginUser.getUser().getBankAccount().getIban();
@@ -45,20 +47,20 @@ public class TransactionService {
 
     @Transactional
     public void save(String payerIban, TransactionCreationDto transactionCreationDto) {
-        BankAccount payer = bankAccountService.getByIban(payerIban);
-        BankAccount payee = bankAccountService.getByIban(transactionCreationDto.getPayeeIban());
+        BankAccount payer = payerIban != null ? bankAccountService.getByIban(payerIban) : null;
+        BankAccount payee = transactionCreationDto.getPayeeIban() != null ? bankAccountService.getByIban(transactionCreationDto.getPayeeIban()) : null;
 
-        if (payer.getBalance().compareTo(transactionCreationDto.getAmount()) < 0) return;
+        if (payer != null && payer.getBalance().compareTo(transactionCreationDto.getAmount()) < 0) return;
 
         Transaction.TransactionBuilder transactionBuilder = Transaction.builder()
                 .payer(payer)
                 .payee(payee)
                 .amount(transactionCreationDto.getAmount())
                 .purpose(transactionPurposeRepository.getReferenceById(transactionCreationDto.getPurpose()))
-                .job(jobService.getById(transactionCreationDto.getJob()));
+                .job(transactionCreationDto.getJob() != null ? jobService.getById(transactionCreationDto.getJob()) : null);
 
-        bankAccountService.update(payer.getIban(), transactionCreationDto.getAmount().negate());
-        bankAccountService.update(payee.getIban(), transactionCreationDto.getAmount());
+        if (payer != null) bankAccountService.update(payer.getIban(), transactionCreationDto.getAmount().negate());
+        if (payee != null) bankAccountService.update(payee.getIban(), transactionCreationDto.getAmount());
 
         transactionBuilder.processedAt(LocalDateTime.now());
         transactionRepository.save(transactionBuilder.build());

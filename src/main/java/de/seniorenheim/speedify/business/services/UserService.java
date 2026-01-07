@@ -1,6 +1,5 @@
 package de.seniorenheim.speedify.business.services;
 
-import de.seniorenheim.speedify.business.util.AuthenticationUtils;
 import de.seniorenheim.speedify.data.dtos.users.UserCreationDto;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.memberships.Membership;
 import de.seniorenheim.speedify.data.entities.users.LoginUser;
@@ -11,7 +10,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,6 +39,10 @@ public class UserService implements UserDetailsService {
 
     public User getById(long id) {
         return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public User getByIban(String iban) {
+        return userRepository.findByBankAccount_Iban(iban).orElseThrow(EntityNotFoundException::new);
     }
 
     @Transactional

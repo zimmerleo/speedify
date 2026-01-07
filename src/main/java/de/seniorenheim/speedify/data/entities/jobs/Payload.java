@@ -18,7 +18,7 @@ public class Payload {
     @Column(nullable = false, length = 1000,  unique = true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private PayloadType payloadType;
 
