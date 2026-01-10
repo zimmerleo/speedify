@@ -24,6 +24,5 @@ public class BankAccount {
     private String iban;
 
     @Column(scale = 2, nullable = false)
-    @Builder.Default
-    private BigDecimal balance = BigDecimal.ZERO;
+    private BigDecimal balance;
 }

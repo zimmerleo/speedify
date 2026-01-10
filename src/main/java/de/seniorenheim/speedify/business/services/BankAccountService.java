@@ -32,6 +32,7 @@ public class BankAccountService {
     public BankAccount createUserAccount() {
         BankAccount bankAccount = BankAccount.builder()
                 .iban(randomizeIban())
+                .balance(BigDecimal.valueOf(5000))
                 .build();
         return bankAccountRepository.save(bankAccount);
     }

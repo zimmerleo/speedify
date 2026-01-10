@@ -1,28 +1,32 @@
 package de.seniorenheim.speedify.business.util;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@Component
 public class FinanceValues {
 
-    // KFZ-Steuer 1500-2000€ / LKW
-    // KFZ-Versicherung 4000 HP + 3000 VK / LKW
-    // Hauptuntersuchung 150€ / LKW
-    // Umsatzsteuer 19%
-    // Körperschaftssteuer 15%
-    // Gewerbesteuer = 3.5% * Gewerbeertrag * Hebesatz; 3.5% * Gewerbeertrag * 3.8 Anrechung auf ESt aber nicht auf KSt
+    private FinanceValues() {}
 
-    private BigDecimal KFZ_STEUER =  BigDecimal.valueOf(1500);
-    private BigDecimal KFZ_HAFTPFLICHT = BigDecimal.valueOf(4000);
-    private BigDecimal KFZ_VOLLKASKO = BigDecimal.valueOf(3000);
-    private BigDecimal HAUPTUNTERSUCHUNG = BigDecimal.valueOf(150);
+    public static final BigDecimal umsatzanteilArbeitnehmer = BigDecimal.valueOf(0.25);
+    public static final BigDecimal fixgehaltArbeitnehmer = BigDecimal.valueOf(2000);
+    public static final BigDecimal lohnsteuerMindestgehalt = BigDecimal.valueOf(1029000);
 
-    private BigDecimal UMSATZSTEUER = BigDecimal.valueOf(0.19);
-    private BigDecimal KÖRPERSCHAFTSSTEUER = BigDecimal.valueOf(0.15);
+    public static final BigDecimal kfzSteuer =  BigDecimal.valueOf(1500);
+    public static final BigDecimal kfzHaftpflicht = BigDecimal.valueOf(4000);
+    public static final BigDecimal kfzVollkasko = BigDecimal.valueOf(3000);
+    public static final BigDecimal kfzHauptuntersuchung = BigDecimal.valueOf(150);
+    public static final BigDecimal berufskraftfahrerqualifikation = BigDecimal.valueOf(100);
+    public static final BigDecimal euGemeinschaftslizenz = BigDecimal.valueOf(50);
+    public static final BigDecimal euGemeinschaftslizenzKopie = BigDecimal.valueOf(7.5);
+
+    public static final BigDecimal sozialversicherungsbeitragssatz = BigDecimal.valueOf(0.2);
+    public static final BigDecimal uvMindestbeitrag = BigDecimal.valueOf(62);
+    public static final BigDecimal uvBeitragssatz = BigDecimal.valueOf(0.013);
+
+    public static final BigDecimal lohnsteuersatz = BigDecimal.valueOf(0.12);
+    public static final BigDecimal[] einkommensteuersätze = { BigDecimal.valueOf(0.19), BigDecimal.valueOf(0.33), BigDecimal.valueOf(0.42), BigDecimal.valueOf(0.45) };
+    public static final BigDecimal[] einkommensteuergrenzen = { BigDecimal.valueOf(290100), BigDecimal.valueOf(425125), BigDecimal.valueOf(1669000), BigDecimal.valueOf(6945625) };
+    public static final BigDecimal umsatzsteuersatz = BigDecimal.valueOf(0.19);
+    public static final BigDecimal koerperschaftssteuersatz = BigDecimal.valueOf(0.15);
+    public static final BigDecimal gewerbesteuersatz = BigDecimal.valueOf(0.035);
+    public static final BigDecimal gewerbesteuerEinkommensteuerHebesatz = BigDecimal.valueOf(3.8);
 }

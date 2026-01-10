@@ -1,10 +1,9 @@
 package de.seniorenheim.speedify.business.services;
 
-import de.seniorenheim.speedify.business.util.AuthenticationUtils;
+import de.seniorenheim.speedify.business.util.FinanceValues;
 import de.seniorenheim.speedify.data.dtos.finance.TransactionCreationDto;
 import de.seniorenheim.speedify.data.entities.finance.BankAccount;
 import de.seniorenheim.speedify.data.entities.finance.Transaction;
-import de.seniorenheim.speedify.data.entities.users.LoginUser;
 import de.seniorenheim.speedify.data.repositories.finance.TransactionPurposeRepository;
 import de.seniorenheim.speedify.data.repositories.finance.TransactionRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class TransactionService {
     private final BankAccountService bankAccountService;
     private final JobService jobService;
     private final TransactionPurposeRepository transactionPurposeRepository;
+    private final UserService userService;
 
     public List<Transaction> getAll() {
         return transactionRepository.findAll();
@@ -34,10 +36,8 @@ public class TransactionService {
         return transactionRepository.findAllByProcessedAtAfter(timestamp);
     }
 
-    public List<Transaction> getAllByCurrentUser() {
-        LoginUser loginUser = AuthenticationUtils.getCurrentUser();
-        String iban = loginUser.getUser().getBankAccount().getIban();
-
+    public List<Transaction> getAllByUserId(Long userId) {
+        String iban = userService.getById(userId).getBankAccount().getIban();
         return transactionRepository.findAllByPayerIbanOrPayee_Iban(iban, iban);
     }
 
@@ -63,7 +63,19 @@ public class TransactionService {
         if (payee != null) bankAccountService.update(payee.getIban(), transactionCreationDto.getAmount());
 
         transactionBuilder.processedAt(LocalDateTime.now());
-        transactionRepository.save(transactionBuilder.build());
+        Transaction transaction = transactionRepository.save(transactionBuilder.build());
+
+        if (transactionCreationDto.getPurpose().equals(3L)) {
+            Transaction ustTransaction = Transaction.builder()
+                    .payer(payee)
+                    .payee(payer)
+                    .amount(transactionCreationDto.getAmount().divide(BigDecimal.ONE.subtract(FinanceValues.umsatzsteuersatz), RoundingMode.HALF_EVEN).subtract(transactionCreationDto.getAmount()))
+                    .purpose(transactionPurposeRepository.getReferenceById(15L))
+                    .job(transactionCreationDto.getJob() != null ? jobService.getById(transactionCreationDto.getJob()) : null)
+                    .processedAt(transaction.getProcessedAt())
+                    .build();
+            transactionRepository.save(ustTransaction);
+        }
     }
 
     @Transactional

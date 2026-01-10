@@ -85,7 +85,7 @@ public class ForwardingAgencyController {
     @PreAuthorize("@authUtils.isHR(#id) || @authUtils.isChiefExecutiveOfficer(#id)")
     @DeleteMapping(value = "{id}/applications/{applicationId}")
     public void deleteApplication(@PathVariable Long id, @PathVariable Long applicationId) {
-        applicationService.delete(applicationId);
+        applicationService.deleteByForwardingAgency(id, applicationId);
     }
 
 
@@ -104,7 +104,7 @@ public class ForwardingAgencyController {
     @PreAuthorize("@authUtils.isManager(#id) || @authUtils.isCLevel(#id)")
     @PatchMapping(value = "{id}/memberships/{membershipId}")
     public void endMembership(@PathVariable Long id, @PathVariable Long membershipId) {
-        membershipService.end(membershipId);
+        membershipService.endByForwardingAgency(id, membershipId);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

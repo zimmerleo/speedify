@@ -1221,6 +1221,7 @@ INSERT INTO relation_types (name) VALUES ('Partnerschaft'),
 
 INSERT INTO transaction_purposes (id, purpose) VALUES (1, 'Tanken'),
                                                   (2, 'Maut'),
+
                                                   (3, 'Umsatz'),
 
                                                   (10,'Gehaltszahlung'),

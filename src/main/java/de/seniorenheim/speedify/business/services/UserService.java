@@ -72,7 +72,7 @@ public class UserService implements UserDetailsService {
     public void delete(long id) {
         userSpecializationService.getAllByUserId(id).forEach(userSpecializationService::delete);
         membershipService.getAllByUserId(id).forEach(membership -> membershipService.delete(membership.getId()));
-        applicationService.getAllByUserId(id).forEach(application -> applicationService.delete(application.getId()));
+        applicationService.getAllByUserId(id).forEach(application -> applicationService.deleteByUser(id, application.getId()));
         userRepository.deleteById(id);
     }
 

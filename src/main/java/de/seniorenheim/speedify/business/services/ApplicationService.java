@@ -51,7 +51,18 @@ public class ApplicationService {
     }
 
     @Transactional
-    public void delete(long id) {
-        applicationRepository.deleteById(id);
+    public void deleteByUser(long userId, long id) {
+        Application toDelete = getById(id);
+        if (toDelete.getUser().getId().equals(userId)) {
+            applicationRepository.delete(toDelete);
+        }
+    }
+
+    @Transactional
+    public void deleteByForwardingAgency(long forwardingAgencyId, long id) {
+        Application toDelete = getById(id);
+        if (toDelete.getForwardingAgency().getId().equals(forwardingAgencyId)) {
+            applicationRepository.delete(toDelete);
+        }
     }
 }

@@ -32,11 +32,115 @@ public class SchedulingService {
 
     @Scheduled(cron = "0 0 0 L * *")
     public void monthly() {
-        List<Transaction> allTransactions = transactionService.getAllByProcessedAtAfter(LocalDateTime.now().minusMonths(1));
+        List<Transaction> allTransactions = getTransactionsInLastXMonths(1);
         doGasAndTolls(new ArrayList<>(allTransactions).stream()
                 .filter(t -> t.getPurpose().getId().equals(1L) || t.getPurpose().getId().equals(2L)).toList());
         doPayChecks(new ArrayList<>(allTransactions).stream()
                 .filter(t -> t.getPurpose().getId().equals(3L)).toList());
+    }
+
+    @Scheduled(cron = "0 0 0 10 3,6,9,12 *")
+    public void est_kst() {
+        Map<String, BigDecimal> revenueTransactions = new ArrayList<>(getTransactionsInLastXMonths(3)).stream()
+                .filter(t -> t.getPurpose().getId().equals(3L))
+                .collect(Collectors.groupingBy(t -> t.getPayee().getIban(), Collectors.reducing(BigDecimal.ZERO, Transaction::getAmount, BigDecimal::add)));
+
+        for (Map.Entry<String, BigDecimal> mapEntry : revenueTransactions.entrySet()) {
+            ForwardingAgency forwardingAgency = forwardingAgencyService.getByIban(mapEntry.getKey());
+
+            Long legalForm = forwardingAgency.getLegalForm().getId();
+            BigDecimal taxes = BigDecimal.ZERO;
+            if (legalForm.equals(1L) || legalForm.equals(2L) || legalForm.equals(3L) || legalForm.equals(4L)) {
+                BigDecimal gstCompensation = mapEntry.getValue().multiply(FinanceValues.gewerbesteuersatz).multiply(FinanceValues.gewerbesteuerEinkommensteuerHebesatz);
+                if (mapEntry.getValue().compareTo(FinanceValues.einkommensteuergrenzen[0]) <= 0) return;
+                if (mapEntry.getValue().compareTo(FinanceValues.einkommensteuergrenzen[1]) <= 0) {
+                    BigDecimal taxEligible = mapEntry.getValue().subtract(FinanceValues.einkommensteuergrenzen[0]);
+                    taxes = taxes.add(taxEligible.multiply(FinanceValues.einkommensteuersätze[0]));
+                }
+                if (mapEntry.getValue().compareTo(FinanceValues.einkommensteuergrenzen[2]) <= 0) {
+                    BigDecimal taxEligible = mapEntry.getValue().subtract(FinanceValues.einkommensteuergrenzen[1]);
+                    taxes = taxes.add(taxEligible.multiply(FinanceValues.einkommensteuersätze[1]));
+                }
+                if (mapEntry.getValue().compareTo(FinanceValues.einkommensteuergrenzen[3]) <= 0) {
+                    BigDecimal taxEligible = mapEntry.getValue().subtract(FinanceValues.einkommensteuergrenzen[2]);
+                    taxes = taxes.add(taxEligible.multiply(FinanceValues.einkommensteuersätze[2]));
+                }
+                if (mapEntry.getValue().compareTo(FinanceValues.einkommensteuergrenzen[3]) > 0) {
+                    BigDecimal taxEligible = mapEntry.getValue().subtract(FinanceValues.einkommensteuergrenzen[3]);
+                    taxes = taxes.add(taxEligible.multiply(FinanceValues.einkommensteuersätze[3]));
+                }
+
+                transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
+                        .payeeIban(null)
+                        .amount(taxes.subtract(gstCompensation))
+                        .purpose(13L)
+                        .job(null)
+                        .build());
+                log.debug("Einkommenssteuer gezahlt.");
+            } else {
+                transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
+                        .payeeIban(null)
+                        .amount(mapEntry.getValue().multiply(FinanceValues.koerperschaftssteuersatz))
+                        .purpose(16L)
+                        .job(null)
+                        .build());
+                log.debug("Körperschaftssteuer gezahlt.");
+            }
+        }
+    }
+
+    @Scheduled(cron = "0 0 0 15 2,5,8,11 *")
+    public void gst() {
+        Map<String, BigDecimal> revenueTransactions = new ArrayList<>(getTransactionsInLastXMonths(3)).stream()
+                .filter(t -> t.getPurpose().getId().equals(3L))
+                .collect(Collectors.groupingBy(t -> t.getPayee().getIban(), Collectors.reducing(BigDecimal.ZERO, Transaction::getAmount, BigDecimal::add)));
+
+        for (Map.Entry<String, BigDecimal> mapEntry : revenueTransactions.entrySet()) {
+            ForwardingAgency forwardingAgency = forwardingAgencyService.getByIban(mapEntry.getKey());
+            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
+                    .payeeIban(null)
+                    .amount(mapEntry.getValue().multiply(FinanceValues.gewerbesteuersatz).multiply(BigDecimal.valueOf(random.nextInt(200, 400)/100)))
+                    .purpose(14L)
+                    .job(null)
+                    .build());
+            log.debug("Gewerbesteuer gezahlt.");
+        }
+    }
+
+    @Scheduled(cron = "0 0 0 1 1 *")
+    public void yearly() {
+        for (ForwardingAgency forwardingAgency : forwardingAgencyService.getAll()) {
+            List<Membership> currentMemberships = membershipService.getAll().stream().filter(m -> m.getForwardingAgency().getId().equals(forwardingAgency.getId()) && m.getUntil().equals(LocalDate.of(9999, 12, 31))).toList();
+            if (currentMemberships.isEmpty()) {
+                forwardingAgencyService.delete(forwardingAgency.getId());
+                log.debug("ForwardingAgency {} wurde aufgrund keiner Mitgliedschaften gelöscht.", forwardingAgency.getId());
+                continue;
+            }
+            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
+                    .payeeIban(null)
+                    .amount(FinanceValues.berufskraftfahrerqualifikation.multiply(BigDecimal.valueOf(currentMemberships.size())))
+                    .purpose(18L)
+                    .job(null)
+                    .build());
+            int truckCount = 0;
+            for (Membership membership : currentMemberships) {
+                truckCount += truckService.getAllByUserId(membership.getUser().getId()).size();
+            }
+            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
+                    .payeeIban(null)
+                    .amount(FinanceValues.kfzSteuer.add(FinanceValues.kfzHaftpflicht.add(FinanceValues.kfzVollkasko.add(FinanceValues.kfzHauptuntersuchung))).multiply(BigDecimal.valueOf(truckCount)))
+                    .purpose(17L)
+                    .job(null)
+                    .build());
+            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
+                    .payeeIban(null)
+                    .amount(FinanceValues.euGemeinschaftslizenz.add(FinanceValues.euGemeinschaftslizenzKopie.multiply(BigDecimal.valueOf(truckCount))))
+                    .purpose(18L)
+                    .job(null)
+                    .build());
+        }
+        log.debug("Berufskraftfahrerqualifikation und EU-Gemeinschaftslizenz gezahlt.");
+        log.debug("KFZ-Steuer, KFZ-Versicherung und Hauptuntersuchung gezahlt.");
     }
 
     private void doGasAndTolls(List<Transaction> gasAndTollTransactions) {
@@ -94,39 +198,34 @@ public class SchedulingService {
 
         for (Map.Entry<String, Map<String, BigDecimal>> mapmapEntry : mapmap.entrySet()) {
             for (Map.Entry<String, BigDecimal> mapEntry : mapmapEntry.getValue().entrySet()) {
-                // RV 18.6% aufgeteilt auf AN und AG
-                // KV 14.6% aufgeteilt auf AN und AG
-                // AV 2.6% aufgeteilt auf AN und AG
-                // PV 4.2% aufgeteilt auf AN und AG
-                // UV mindestens 62€, 1.3% vom AG
-                // Lohnsteuer 12% vom Bruttolohn
-
-                BigDecimal paycheckVolume = mapEntry.getValue().multiply(BigDecimal.valueOf(0.25)).add(BigDecimal.valueOf(2000));
-                boolean lst = paycheckVolume.compareTo(BigDecimal.valueOf(1029000)) >= 0;
-                boolean uv = paycheckVolume.multiply(BigDecimal.valueOf(0.013)).compareTo(BigDecimal.valueOf(62)) > 0;
+                BigDecimal paycheckVolume = FinanceValues.fixgehaltArbeitnehmer.add(mapEntry.getValue().multiply(FinanceValues.umsatzanteilArbeitnehmer));
+                boolean lst = paycheckVolume.compareTo(FinanceValues.lohnsteuerMindestgehalt) >= 0;
+                boolean uv = paycheckVolume.multiply(FinanceValues.uvBeitragssatz).compareTo(FinanceValues.uvMindestbeitrag) > 0;
 
                 transactionService.save(mapmapEntry.getKey(), TransactionCreationDto.builder()
                         .payeeIban(mapEntry.getKey())
-                        .amount(lst ? paycheckVolume.multiply(BigDecimal.valueOf(0.68)) : paycheckVolume.multiply(BigDecimal.valueOf(0.8)))
+                        .amount(lst ? paycheckVolume.multiply(BigDecimal.ONE.subtract(FinanceValues.lohnsteuersatz.add(FinanceValues.sozialversicherungsbeitragssatz)))
+                                : paycheckVolume.multiply(BigDecimal.ONE.subtract(FinanceValues.sozialversicherungsbeitragssatz)))
                         .purpose(10L)
                         .job(null)
                         .build());
                 transactionService.save(mapmapEntry.getKey(), TransactionCreationDto.builder()
                         .payeeIban(null)
-                        .amount(paycheckVolume.multiply(BigDecimal.valueOf(uv ? 0.213 : 0.2)).add(uv ? BigDecimal.ZERO : BigDecimal.valueOf(62)))
+                        .amount(paycheckVolume.multiply(uv ? FinanceValues.sozialversicherungsbeitragssatz.add(FinanceValues.uvBeitragssatz)
+                                : FinanceValues.sozialversicherungsbeitragssatz).add(uv ? BigDecimal.ZERO : FinanceValues.uvMindestbeitrag))
                         .purpose(11L)
                         .job(null)
                         .build());
                 transactionService.save(mapEntry.getKey(), TransactionCreationDto.builder()
                         .payeeIban(null)
-                        .amount(paycheckVolume.multiply(BigDecimal.valueOf(0.2)))
+                        .amount(paycheckVolume.multiply(FinanceValues.sozialversicherungsbeitragssatz))
                         .purpose(11L)
                         .job(null)
                         .build());
                 if (lst) {
                     transactionService.save(mapEntry.getKey(), TransactionCreationDto.builder()
                             .payeeIban(null)
-                            .amount(paycheckVolume.multiply(BigDecimal.valueOf(0.12)))
+                            .amount(paycheckVolume.multiply(FinanceValues.lohnsteuersatz))
                             .purpose(12L)
                             .job(null)
                             .build());
@@ -136,116 +235,7 @@ public class SchedulingService {
         log.debug("Gehälter gezahlt.");
     }
 
-    @Scheduled(cron = "0 0 0 10 4,7,10,1 *")
-    public void ust() {
-        // Umsatzsteuer 19%
-        log.info("Umsatzsteuer...");
-    }
-
-    @Scheduled(cron = "0 0 0 10 3,6,9,12 *")
-    public void est_kst() {
-        List<Transaction> allTransactions = transactionService.getAllByProcessedAtAfter(LocalDateTime.now().minusMonths(3));
-        Map<String, BigDecimal> revenueTransactions = new ArrayList<>(allTransactions).stream()
-                .filter(t -> t.getPurpose().getId().equals(3L))
-                .collect(Collectors.groupingBy(t -> t.getPayee().getIban(), Collectors.reducing(BigDecimal.ZERO, Transaction::getAmount, BigDecimal::add)));
-
-        for (Map.Entry<String, BigDecimal> mapEntry : revenueTransactions.entrySet()) {
-            ForwardingAgency forwardingAgency = forwardingAgencyService.getByIban(mapEntry.getKey());
-
-            Long legalForm = forwardingAgency.getLegalForm().getId();
-            BigDecimal taxes = BigDecimal.ZERO;
-            BigDecimal gstCompensation = mapEntry.getValue().multiply(BigDecimal.valueOf(0.035)).multiply(BigDecimal.valueOf(3.8));
-            if (legalForm.equals(1L) || legalForm.equals(2L) || legalForm.equals(3L) || legalForm.equals(4L)) {
-                if (mapEntry.getValue().compareTo(BigDecimal.valueOf(290100)) <= 0) return;
-                if (mapEntry.getValue().compareTo(BigDecimal.valueOf(425125)) <= 0) {
-                    BigDecimal taxEligible = mapEntry.getValue().subtract(BigDecimal.valueOf(290100));
-                    taxes = taxes.add(taxEligible.multiply(BigDecimal.valueOf(0.19)));
-                }
-                if (mapEntry.getValue().compareTo(BigDecimal.valueOf(1669000)) <= 0) {
-                    BigDecimal taxEligible = mapEntry.getValue().subtract(BigDecimal.valueOf(425125));
-                    taxes = taxes.add(taxEligible.multiply(BigDecimal.valueOf(0.33)));
-                }
-                if (mapEntry.getValue().compareTo(BigDecimal.valueOf(6945625)) <= 0) {
-                    BigDecimal taxEligible = mapEntry.getValue().subtract(BigDecimal.valueOf(1669000));
-                    taxes = taxes.add(taxEligible.multiply(BigDecimal.valueOf(0.42)));
-                }
-                if (mapEntry.getValue().compareTo(BigDecimal.valueOf(6945625)) > 0) {
-                    BigDecimal taxEligible = mapEntry.getValue().subtract(BigDecimal.valueOf(6945625));
-                    taxes = taxes.add(taxEligible.multiply(BigDecimal.valueOf(0.45)));
-                }
-
-                transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
-                        .payeeIban(null)
-                        .amount(taxes.subtract(gstCompensation))
-                        .purpose(13L)
-                        .job(null)
-                        .build());
-                log.debug("Einkommenssteuer gezahlt.");
-            } else {
-                transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
-                        .payeeIban(null)
-                        .amount(mapEntry.getValue().multiply(BigDecimal.valueOf(0.15)))
-                        .purpose(16L)
-                        .job(null)
-                        .build());
-                log.debug("Körperschaftssteuer gezahlt.");
-            }
-        }
-    }
-
-    @Scheduled(cron = "0 0 0 15 2,5,8,11 *")
-    public void gst() {
-        // Gewerbesteuer = 3.5% * Gewerbeertrag * Hebesatz; 3.5% * Gewerbeertrag * 3.8 Anrechung auf ESt aber nicht auf KSt
-        List<Transaction> allTransactions = transactionService.getAllByProcessedAtAfter(LocalDateTime.now().minusMonths(3));
-        Map<String, BigDecimal> revenueTransactions = new ArrayList<>(allTransactions).stream()
-                .filter(t -> t.getPurpose().getId().equals(3L))
-                .collect(Collectors.groupingBy(t -> t.getPayee().getIban(), Collectors.reducing(BigDecimal.ZERO, Transaction::getAmount, BigDecimal::add)));
-
-        for (Map.Entry<String, BigDecimal> mapEntry : revenueTransactions.entrySet()) {
-            ForwardingAgency forwardingAgency = forwardingAgencyService.getByIban(mapEntry.getKey());
-            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
-                    .payeeIban(null)
-                    .amount(mapEntry.getValue().multiply(BigDecimal.valueOf(0.035)).multiply(BigDecimal.valueOf(random.nextInt(200, 400)/100)))
-                    .purpose(14L)
-                    .job(null)
-                    .build());
-            log.debug("Gewerbesteuer gezahlt.");
-        }
-    }
-
-    @Scheduled(cron = "0 0 0 1 1 *")
-    public void yearly() {
-        for (ForwardingAgency forwardingAgency : forwardingAgencyService.getAll()) {
-            List<Membership> currentMemberships = membershipService.getAll().stream().filter(m -> m.getForwardingAgency().getId().equals(forwardingAgency.getId()) && m.getUntil().equals(LocalDate.of(9999, 12, 31))).toList();
-            if (currentMemberships.isEmpty()) {
-                forwardingAgencyService.delete(forwardingAgency.getId());
-                log.debug("ForwardingAgency {} wurde aufgrund keiner Mitgliedschaften gelöscht.", forwardingAgency.getId());
-                continue;
-            }
-            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
-                    .payeeIban(null)
-                    .amount(BigDecimal.valueOf(100).multiply(BigDecimal.valueOf(currentMemberships.size())))
-                    .purpose(18L)
-                    .job(null)
-                    .build());
-            int truckCount = 0;
-            for (Membership membership : currentMemberships) {
-                truckCount += truckService.getAllByUserId(membership.getUser().getId()).size();
-            }
-            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
-                    .payeeIban(null)
-                    .amount(BigDecimal.valueOf(8900).multiply(BigDecimal.valueOf(truckCount)))
-                    .purpose(18L)
-                    .job(null)
-                    .build());
-            transactionService.save(forwardingAgency.getBankAccount().getIban(), TransactionCreationDto.builder()
-                    .payeeIban(null)
-                    .amount(BigDecimal.valueOf(100).add(BigDecimal.valueOf(10).multiply(BigDecimal.valueOf(truckCount))))
-                    .purpose(17L)
-                    .job(null)
-                    .build());
-        }
-        log.debug("Berufskraftfahrerqualifikation und EU-Gemeinschaftslizenz gezahlt.");
-        log.debug("KFZ-Steuer, KFZ-Versicherung und Hauptuntersuchung gezahlt.");
+    private List<Transaction> getTransactionsInLastXMonths(long minusMonths) {
+        return transactionService.getAllByProcessedAtAfter(LocalDateTime.now().minusMonths(minusMonths));
     }
 }

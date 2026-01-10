@@ -57,10 +57,10 @@ public class MembershipService {
     public void save(Long forwardingAgencyId, MembershipCreationDto membershipCreationDto) {
         Membership currentMembership = getCurrentMembership(membershipCreationDto.getUser());
         if (currentMembership != null) {
-            end(currentMembership.getId());
+            endByUser(membershipCreationDto.getUser(), currentMembership.getId());
         }
         for (Application application : applicationService.getAllByUserId(membershipCreationDto.getUser())) {
-            applicationService.delete(application.getId());
+            applicationService.deleteByUser(membershipCreationDto.getUser(), application.getId());
         }
         Membership entity = Membership.builder()
                 .user(userRepository.getReferenceById(membershipCreationDto.getUser()))
@@ -73,16 +73,27 @@ public class MembershipService {
     }
 
     @Transactional
-    public void end(Long id) {
+    public void endByUser(Long userId, Long id) {
         Membership entity = getById(id);
-        Role superior = entity.getRole().getSuperior();
-
-        while (!superior.getId().equals(AuthenticationUtils.getCurrentUser().getRole().getId())) {
-            if (superior.getSuperior() == null) return;
-            superior = superior.getSuperior();
+        if (entity.getUser().getId().equals(userId)) {
+            entity.setUntil(LocalDate.now());
+            membershipRepository.save(entity);
         }
-        entity.setUntil(LocalDate.now());
-        membershipRepository.save(entity);
+    }
+
+    @Transactional
+    public void endByForwardingAgency(Long forwardingAgencyId, Long id) {
+        Membership entity = getById(id);
+        if (entity.getForwardingAgency().getId().equals(forwardingAgencyId)) {
+            Role superior = entity.getRole().getSuperior();
+
+            while (!superior.getId().equals(AuthenticationUtils.getCurrentUser().getRole().getId())) {
+                if (superior.getSuperior() == null) return;
+                superior = superior.getSuperior();
+            }
+            entity.setUntil(LocalDate.now());
+            membershipRepository.save(entity);
+        }
     }
 
     @Transactional

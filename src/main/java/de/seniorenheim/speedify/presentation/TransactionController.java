@@ -34,7 +34,7 @@ public class TransactionController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public void save(@RequestBody TransactionCreationDto transactionCreationDto) {
-        transactionService.save(AuthenticationUtils.getCurrentUser().getUser().getBankAccount().getIban(), transactionCreationDto);
+        transactionService.save(transactionCreationDto.getPurpose().equals(3L) ? null : AuthenticationUtils.getCurrentUser().getUser().getBankAccount().getIban(), transactionCreationDto);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

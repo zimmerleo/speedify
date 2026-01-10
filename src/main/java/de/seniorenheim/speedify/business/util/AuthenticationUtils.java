@@ -222,8 +222,6 @@ public class AuthenticationUtils {
                 isChiefMarketingOfficer(forwardingAgencyId);
     }
 
-
-
     private static Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }
