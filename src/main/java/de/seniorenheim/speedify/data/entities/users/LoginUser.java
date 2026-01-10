@@ -1,5 +1,6 @@
 package de.seniorenheim.speedify.data.entities.users;
 
+import de.seniorenheim.speedify.business.util.AuthenticationUtils;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.ForwardingAgency;
 import de.seniorenheim.speedify.data.entities.forwardingagencies.memberships.roles.Role;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class LoginUser implements UserDetails {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         if (role != null &&  forwardingAgency != null) {
-            authorities.add(new SimpleGrantedAuthority("AGENCY_" + forwardingAgency.getId() + "_" + role.getId()));
+            authorities.add(new SimpleGrantedAuthority(AuthenticationUtils.AGENCY_PREFIX + forwardingAgency.getId() + "_" + role.getId()));
         }
         return authorities;
     }

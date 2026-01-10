@@ -26,7 +26,7 @@ public class RelationService {
     }
 
     public List<Relation> getAllByForwardingAgencyId(Long forwardingAgencyId) {
-        return getAll().stream().filter(relation -> relation.getForwardingAgency_1().getId() == forwardingAgencyId || relation.getForwardingAgency_2().getId() == forwardingAgencyId).toList();
+        return getAll().stream().filter(relation -> relation.getForwardingAgency_1().getId().equals(forwardingAgencyId) || relation.getForwardingAgency_2().getId().equals(forwardingAgencyId)).toList();
     }
 
     @Transactional

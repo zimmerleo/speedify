@@ -95,7 +95,7 @@ public class ForwardingAgencyService {
     @Transactional
     public void delete(long id) {
         membershipService.getAllByForwardingAgencyId(id).forEach(membership -> membershipService.delete(membership.getId()));
-        applicationService.getAllByForwardingAgencyId(id).forEach(application -> applicationService.delete(application.getId()));
+        applicationService.getAllByForwardingAgencyId(id).forEach(application -> applicationService.deleteByForwardingAgency(id, application.getId()));
         forwardingAgencyRepository.deleteById(id);
     }
 }

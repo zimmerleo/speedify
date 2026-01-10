@@ -40,7 +40,7 @@ public class SchedulingService {
     }
 
     @Scheduled(cron = "0 0 0 10 3,6,9,12 *")
-    public void est_kst() {
+    public void estkst() {
         Map<String, BigDecimal> revenueTransactions = new ArrayList<>(getTransactionsInLastXMonths(3)).stream()
                 .filter(t -> t.getPurpose().getId().equals(3L))
                 .collect(Collectors.groupingBy(t -> t.getPayee().getIban(), Collectors.reducing(BigDecimal.ZERO, Transaction::getAmount, BigDecimal::add)));
